@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>الرابطة سويتس | Al Rabita Suites</title>
+<style>
+body {
+font-family: 'Arial', sans-serif;
+margin: 0;
+background-color: #f4f4f4;
+text-align: center;
+direction: rtl;
+}
+
+h1 {
+background-color: #2c3e50;
+color: white;
+padding: 20px;
+font-size: 26px;
+}
+
+.floor-selection {
+display: flex;
+flex-direction: column;
+gap: 15px;
+margin: 30px auto;
+width: 90%;
+max-width: 500px;
+}
+
+.floor-selection button {
+background-color: #2c3e50;
+color: white;
+font-size: 18px;
+font-weight: bold;
+padding: 14px 20px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+text-align: center;
+width: 100%;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: background-color 0.3s;
+}
+
+.floor-selection button:hover {
+background-color: #1a252f;
+}
+
+.card-container {
+display: none;
+flex-wrap: wrap;
+justify-content: center;
+gap: 15px;
+padding: 20px;
+}
+
+.card {
+background-color: #159b87;
+color: white;
+border-radius: 10px;
+padding: 15px;
+width: 45%;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card input, .card select {
+width: 100%;
+padding: 6px;
+margin: 5px 0;
+border: none;
+border-radius: 4px;
+text-align: center;
+}
+
+.save-btn {
+background-color: #2c3e50;
+color: white;
+border: none;
+padding: 10px 15px;
+border-radius: 6px;
+margin-top: 10px;
+cursor: pointer;
+font-weight: bold;
+}
+
+.save-btn:hover {
+background-color: #1a252f;
+}
+
+.search-bar {
+display: none;
+margin: 10px auto;
+max-width: 400px;
+}
+
+.search-bar input {
+width: 100%;
+padding: 10px;
+font-size: 16px;
+text-align: center;
+}
+
+.back-btn {
+display: none;
+margin: 20px auto 10px;
+color: #2c3e50;
+font-weight: bold;
+text-decoration: underline;
+font-size: 16px;
+width: fit-content;
+cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>الرابطة سويتس | Al Rabita Suites</h1>
+
+<div class="floor-selection" id="mainMenu">
+<button onclick="showFloor('floor1')">• الـطـابـق 1 | ضباط</button>
+<button onclick="showFloor('floor2')">• الـطـابـق 2 | رقيب أول - رئيس رقباء</button>
+<button onclick="showFloor('floor3')">• الـطـابـق 3 | أفراد</button>
+<button onclick="showFloor('floor4')">• الـطـابـق 4 | أفراد</button>
+</div>
+
+<div class="search-bar" id="searchContainer">
+<input type="text" id="searchInput" onkeyup="searchGuests()" placeholder="ابحث بالاسم، الرقم، الرتبة، أو رقم اللوحة">
+</div>
+
+<div class="back-btn" id="backBtn" onclick="goBack()">رجوع للقائمة الرئيسية</div>
+
+<div id="floor1" class="card-container"></div>
+<div id="floor2" class="card-container"></div>
+<div id="floor3" class="card-container"></div>
+<div id="floor4" class="card-container"></div>
+
+<script>
+const ranks = {
+floor1: ["ملازم", "ملازم أول", "نقيب", "رائد", "مقدم", "عقيد", "عميد", "لواء", "فريق"],
+floor2: ["رقيب أول", "رئيس رقباء"],
+floor3: ["جندي", "جندي أول", "عريف", "وكيل رقيب", "رقيب"],
+floor4: ["جندي", "جندي أول", "عريف", "وكيل رقيب", "رقيب"]
+};
+
+function showFloor(floorId) {
+document.getElementById('mainMenu').style.display = 'none';
+document.getElementById('searchContainer').style.display = 'block';
+document.getElementById('backBtn').style.display = 'block';
+document.querySelectorAll('.card-container').forEach(el => el.style.display = 'none');
+const container = document.getElementById(floorId);
+container.style.display = 'flex';
+if (container.innerHTML.trim() === '') {
+const rooms = floorId === 'floor1' || floorId === 'floor2' ? 36 : 24;
+const guestsPerRoom = floorId === 'floor1' || floorId === 'floor2' ? 3 : 8;
+for (let i = 1; i <= rooms; i++) {
+const card = document.createElement('div');
+card.className = 'card';
+card.setAttribute('data-room', i);
+let guestInputs = '';
+for (let j = 1; j <= guestsPerRoom; j++) {
+guestInputs += `
+<hr>
+<strong>النزيل ${j}</strong>
+<input type="text" placeholder="الاسم" data-key="guest${j}_name">
+<input type="text" placeholder="الرقم" maxlength="10" data-key="guest${j}_id">
+<select data-key="guest${j}_rank">
+<option disabled selected>الرتبة</option>
+${ranks[floorId].map(r => `<option>${r}</option>`).join('')}
+</select>
+<input type="text" placeholder="المنتدب من" data-key="guest${j}_from">
+<select data-key="guest${j}_location">
+<option disabled selected>المنتدب في</option>
+<option>العاصمة</option>
+<option>الحرم</option>
+</select>
+<input type="text" placeholder="رقم اللوحة" data-key="guest${j}_plate">
+`;
+}
+card.innerHTML = `<h3>غرفة ${i}</h3>${guestInputs}<button class="save-btn" onclick="saveData(this)">حفظ</button>`;
+container.appendChild(card);
+}
+loadData(floorId);
+}
+}
+
+function goBack() {
+document.getElementById('mainMenu').style.display = 'flex';
+document.getElementById('searchContainer').style.display = 'none';
+document.getElementById('backBtn').style.display = 'none';
+document.querySelectorAll('.card-container').forEach(el => el.style.display = 'none');
+}
+
+function searchGuests() {
+const val = document.getElementById('searchInput').value.toLowerCase();
+document.querySelectorAll('.card-container').forEach(container => {
+container.querySelectorAll('.card').forEach(card => {
+const inputs = card.querySelectorAll('input, select');
+let match = false;
+inputs.forEach(input => {
+if (input.value.toLowerCase().includes(val)) match = true;
+});
+card.style.display = match || val === '' ? 'block' : 'none';
+});
+});
+}
+
+function saveData(button) {
+const card = button.parentElement;
+const floorId = card.parentElement.id;
+const room = card.getAttribute('data-room');
+const inputs = card.querySelectorAll('[data-key]');
+const data = {};
+inputs.forEach(input => {
+data[input.getAttribute('data-key')] = input.value;
+});
+localStorage.setItem(`${floorId}_room${room}`, JSON.stringify(data));
+alert('تم حفظ البيانات بنجاح');
+}
+
+function loadData(floorId) {
+const cards = document.querySelectorAll(`#${floorId} .card`);
+cards.forEach(card => {
+const room = card.getAttribute('data-room');
+const saved = localStorage.getItem(`${floorId}_room${room}`);
+if (saved) {
+const data = JSON.parse(saved);
+card.querySelectorAll('[data-key]').forEach(input => {
+const key = input.getAttribute('data-key');
+if (data[key]) input.value = data[key];
+});
+}
+});
+}
+</script>
+
+</body>
+</html>
