@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>نظام تسكين النزلاء</title>
+  <style>
+    body { font-family: Arial; direction: rtl; text-align: right; padding: 20px; background: #f9f9f9; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    th { background: #eee; }
+    input, select { padding: 8px; width: 100%; margin-bottom: 10px; }
+    .search-box { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+  <h2>نظام إدارة تسكين النزلاء</h2>
+
+  <form id="dataForm">
+    <label>الاسم</label>
+    <input type="text" id="name" required>
+
+    <label>رقم الجوال</label>
+    <input type="text" id="phone">
+
+    <label>الجهة</label>
+    <input type="text" id="department">
+
+    <label>رقم الغرفة</label>
+    <input type="text" id="roomNumber" required>
+
+    <label>رقم اللوحة</label>
+    <input type="text" id="plateNumber">
+
+    <label>حالة الغرفة</label>
+    <select id="status">
+      <option value="جاهزة">جاهزة</option>
+      <option value="مشغولة">مشغولة</option>
+      <option value="قيد التجهيز">قيد التجهيز</option>
+    </select>
+
+    <button type="submit">حفظ البيانات</button>
+  </form>
+
+  <div class="search-box">
+    <label>بحث بالاسم أو رقم اللوحة</label>
+    <input type="text" id="search" placeholder="ابحث...">
+  </div>
+
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>الاسم</th>
+        <th>رقم الجوال</th>
+        <th>الجهة</th>
+        <th>رقم الغرفة</th>
+        <th>رقم اللوحة</th>
+        <th>الحالة</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('dataForm');
+    const table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+    const searchInput = document.getElementById('search');
+
+    let data = [];
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const entry = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        department: document.getElementById('department').value,
+        roomNumber: document.getElementById('roomNumber').value,
+        plateNumber: document.getElementById('plateNumber').value,
+        status: document.getElementById('status').value
+      };
+
+      data.push(entry);
+      renderTable(data);
+      form.reset();
+    });
+
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const filtered = data.filter(row => 
+        row.name.toLowerCase().includes(query) || 
+        row.plateNumber.toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    });
+
+    function renderTable(dataArray) {
+      table.innerHTML = '';
+      dataArray.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.name}</td>
+          <td>${row.phone}</td>
+          <td>${row.department}</td>
+          <td>${row.roomNumber}</td>
+          <td>${row.plateNumber}</td>
+          <td>${row.status}</td>
+        `;
+        table.appendChild(tr);
+      });
+    }
+  </script>
+
+</body>
+</html>
