@@ -2,10 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>مـبـنى رابـطـة الـعـالـم الإسـلامـي</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مـبـنـى رابـطـة الـعـالـم الإسـلامـي</title>
+  <link rel="manifest" href="manifest.json">
   <style>
-    /* [نفس التنسيق اللي أرسلته لك سابقاً] */
     body {
       font-family: 'Arial', sans-serif;
       background-color: #1e1e1e;
@@ -133,34 +132,154 @@
   </style>
 </head>
 <body>
-  <h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
 
-  <div class="floor-selection">
-    <button class="floor-btn" onclick="loadFloor(1)">الــطـــابــق الأول</button>
-    <button class="floor-btn" onclick="loadFloor(2)">الـطـابـق الـثــانـي</button>
-    <button class="floor-btn" onclick="loadFloor(3)">الـطـابـق الـثـالـث</button>
-    <button class="floor-btn" onclick="loadFloor(4)">الـطــابــق الـرابـع</button>
-    <button class="floor-btn" onclick="loadFloor(0)">الـجـمـيـع</button>
-  </div>
+<h2>مـبـنـى رابـطـة الـعـالـم الإسـلامـي</h2>
 
-  <input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
-  <button id="export-btn" onclick="exportData()">إصـدار تـقـريـر</button>
-  <div id="cards" class="cards-container"></div>
+<div class="floor-selection">
+  <button class="floor-btn" onclick="loadFloor('all')">جميع الغرف</button>
+  <button class="floor-btn" onclick="loadFloor(1)">الــطـــابــق الأول</button>
+  <button class="floor-btn" onclick="loadFloor(2)">الـطـابـق الـثــانـي</button>
+  <button class="floor-btn" onclick="loadFloor(3)">الـطـابـق الـثـالـث</button>
+  <button class="floor-btn" onclick="loadFloor(4)">الـطــابــق الـرابـع</button>
+</div>
 
-  <script>
-    // [نفس كود JavaScript السابق اللي أنشأ الكروت والبحث والتقرير]
-    // --- تم اختصاره هنا للحجم، أكمل من النسخة اللي عدلتها لك بالكامل ---
-  </script>
+<input type="text" id="search" placeholder="ابحث عن نزيل أو رقم أو رتبة أو لوحة" oninput="searchRooms()">
+<button id="export-btn" onclick="exportData()">إصدار تقرير</button>
 
-  <script>
-    // تفعيل service worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log("Service Worker مسجل:", reg.scope))
-          .catch(err => console.error("فشل التسجيل:", err));
+<div id="cards" class="cards-container"></div>
+
+<script>
+let currentFloor = 1;
+const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
+const occupantsPerRoom = { 1: 3, 2: 3, 3: 8, 4: 8 };
+const ranks = {
+  1: ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'],
+  2: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب', 'رقيب أول', 'رئيس رقباء'],
+  3: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب'],
+  4: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب']
+};
+let data = JSON.parse(localStorage.getItem('housingData') || '{}');
+
+function saveToStorage() {
+  localStorage.setItem('housingData', JSON.stringify(data));
+}
+
+function loadFloor(floor) {
+  currentFloor = floor;
+  document.getElementById('search').style.display = floor === 'all' ? 'block' : 'none';
+  const container = document.getElementById('cards');
+  container.innerHTML = '';
+
+  const floorsToShow = floor === 'all' ? [1, 2, 3, 4] : [floor];
+
+  floorsToShow.forEach(f => {
+    for (let i = 1; i <= roomCounts[f]; i++) {
+      const roomNumber = `${f}${i.toString().padStart(2, '0')}`;
+      const roomKey = `room-${roomNumber}`;
+      if (!data[roomKey]) {
+        data[roomKey] = Array.from({ length: occupantsPerRoom[f] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
+      }
+
+      const card = document.createElement('div');
+      card.className = 'room-card';
+      card.id = roomKey;
+
+      const title = document.createElement('div');
+      title.className = 'room-title';
+      title.textContent = `غـرفـة | ${roomNumber}`;
+
+      const toggle = document.createElement('button');
+      toggle.className = 'toggle-btn';
+      toggle.innerHTML = '▼';
+      toggle.onclick = () => {
+        card.classList.toggle('open');
+        toggle.innerHTML = card.classList.contains('open') ? '▲' : '▼';
+      };
+
+      const dots = document.createElement('div');
+      dots.className = 'status-dots';
+      data[roomKey].forEach(occ => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (occ.name ? ' filled' : '');
+        dots.appendChild(dot);
       });
+
+      const occContainer = document.createElement('div');
+      occContainer.className = 'occupants';
+
+      data[roomKey].forEach((occ, idx) => {
+        const occDiv = document.createElement('div');
+        occDiv.className = 'occupant';
+        occDiv.innerHTML = `
+          <input type="text" placeholder="الاسم" value="${occ.name}" oninput="updateField('${roomKey}', ${idx}, 'name', this.value)">
+          <input type="tel" placeholder="رقم التواصل" maxlength="10" value="${occ.phone}" oninput="updateField('${roomKey}', ${idx}, 'phone', this.value)">
+          <select onchange="updateField('${roomKey}', ${idx}, 'rank', this.value)">
+            <option value="">الرتبة</option>
+            ${ranks[f].map(rank => `<option value="${rank}" ${occ.rank === rank ? 'selected' : ''}>${rank}</option>`).join('')}
+          </select>
+          <input type="text" placeholder="رقم اللوحة" value="${occ.plate}" oninput="updateField('${roomKey}', ${idx}, 'plate', this.value)">
+        `;
+        occContainer.appendChild(occDiv);
+      });
+
+      card.appendChild(title);
+      card.appendChild(toggle);
+      card.appendChild(dots);
+      card.appendChild(occContainer);
+      container.appendChild(card);
     }
-  </script>
+  });
+
+  saveToStorage();
+}
+
+function updateField(room, index, field, value) {
+  data[room][index][field] = value;
+  saveToStorage();
+  const dotsContainer = document.querySelector(`#${room} .status-dots`);
+  dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
+}
+
+function searchRooms() {
+  const val = document.getElementById('search').value.trim();
+  const cards = document.querySelectorAll('.room-card');
+  cards.forEach(card => {
+    const roomData = data[card.id];
+    const match = roomData.some(occ =>
+      occ.name.includes(val) || occ.phone.includes(val) || occ.rank.includes(val) || occ.plate.includes(val)
+    );
+    card.style.display = match ? 'block' : 'none';
+    if (match) card.classList.remove('open');
+  });
+}
+
+function exportData() {
+  let output = '';
+  Object.keys(data).forEach(room => {
+    const occupants = data[room].filter(occ => occ.name);
+    if (occupants.length > 0) {
+      output += `${room.replace('room-', 'غرفة | ')}:\n`;
+      occupants.forEach((occ, i) => {
+        output += ` ${i + 1}- الاسم: ${occ.name}, التواصل: ${occ.phone}, الرتبة: ${occ.rank}, اللوحة: ${occ.plate}\n`;
+      });
+      output += '\n';
+    }
+  });
+  const newWindow = window.open('', '', 'width=800,height=600');
+  newWindow.document.write(`<pre style="direction: rtl; font-family: Arial">${output}</pre>`);
+}
+
+loadFloor(1);
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').then(reg => {
+    console.log('Service Worker Registered');
+  }).catch(err => {
+    console.error('SW registration failed:', err);
+  });
+}
+</script>
+
 </body>
 </html>
