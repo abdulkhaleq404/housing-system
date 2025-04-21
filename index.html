@@ -1,8 +1,8 @@
-‏<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>مـبـنى رابـطـة الـعـالـم الإسـلامـي</title>
+<title><b>مـبـنى رابـطـة الـعـالـم الإسـلامـي</b></title>
 <style>
 body {
   font-family: 'Arial', sans-serif;
@@ -14,6 +14,7 @@ body {
 h2 {
   text-align: center;
   font-size: 28px;
+  font-weight: bold;
 }
 .floor-selection {
   display: flex;
@@ -31,6 +32,7 @@ h2 {
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  font-weight: bold;
 }
 .floor-btn:hover {
   background-color: #666;
@@ -40,6 +42,7 @@ h2 {
   padding: 12px 20px;
   background-color: #0b2545;
   color: white;
+  font-weight: bold;
 }
 #main-btn:hover {
   background-color: #133b5c;
@@ -65,29 +68,30 @@ h2 {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
 }
 #export-btn:hover {
   background-color: #133b5c;
 }
 .stats-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  justify-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
   margin-top: 40px;
 }
 .stat-box {
   background-color: #2c2c2c;
   border-radius: 8px;
-  padding: 15px;
-  width: 160px;
+  padding: 20px;
+  width: 200px;
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 .stat-number {
-  font-size: 28px;
+  font-size: 36px;
   margin: 10px 0 0;
+  font-weight: bold;
 }
 .cards-container {
   display: flex;
@@ -162,30 +166,27 @@ h2 {
   .room-card {
     width: 100%;
   }
-  .stats-container {
-    grid-template-columns: repeat(1, 1fr);
-  }
 }
 </style>
 </head>
 <body>
 
-<h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
+<h2><b>مـبـنى رابـطـة الـعـالـم الإسـلامـي</b></h2>
 
 <div class="floor-selection">
-  <button id="main-btn" class="floor-btn" onclick="loadMain()">الـصـفـحـة الـرئـيـسـية</button>
+  <button id="main-btn" class="floor-btn" onclick="loadMain()"><b>الـصـفـحـة الـرئـيـسـية</b></button>
 </div>
 
 <div class="floor-selection">
-  <button class="floor-btn" onclick="loadFloor(1)">الــطـــابــق الأول</button>
-  <button class="floor-btn" onclick="loadFloor(2)">الـطـابـق الـثــانـي</button>
-  <button class="floor-btn" onclick="loadFloor(3)">الـطـابـق الـثـالـث</button>
-  <button class="floor-btn" onclick="loadFloor(4)">الـطــابــق الـرابـع</button>
-  <button class="floor-btn" onclick="loadFloor(0)">الـجـمـيـع</button>
+  <button class="floor-btn" onclick="loadFloor(1)"><b>الــطـــابــق الأول</b></button>
+  <button class="floor-btn" onclick="loadFloor(2)"><b>الـطـابـق الـثــانـي</b></button>
+  <button class="floor-btn" onclick="loadFloor(3)"><b>الـطـابـق الـثـالـث</b></button>
+  <button class="floor-btn" onclick="loadFloor(4)"><b>الـطــابــق الـرابـع</b></button>
+  <button class="floor-btn" onclick="loadFloor(0)"><b>الـجـمـيـع</b></button>
 </div>
 
 <input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
-<button id="export-btn" onclick="exportData()">إصـدار تـقـريـر</button>
+<button id="export-btn" onclick="exportData()"><b>إصـدار تـقـريـر</b></button>
 
 <div id="cards" class="cards-container"></div>
 
@@ -208,12 +209,18 @@ function saveToStorage() {
 function loadMain() {
   document.getElementById('cards').innerHTML = `
     <div class="stats-container">
-      <div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">408</div></div>
-      <div class="stat-box"><div>الغرف الشاغرة</div><div class="stat-number">${408 - countGuests()}</div></div>
-      <div class="stat-box"><div>الغرف المشغولة</div><div class="stat-number">${countGuests()}</div></div>
-      <div class="stat-box"><div>الضباط</div><div class="stat-number">${countRanks('ضباط')}</div></div>
-      <div class="stat-box"><div>الأفراد</div><div class="stat-number">${countRanks('أفراد')}</div></div>
-      <div class="stat-box"><div>السيارات</div><div class="stat-number">${countCars()}</div></div>
+      <div class="stat-box">
+        <div><b>إجمالي الغرف</b></div>
+        <div class="stat-number">${Object.values(roomCounts).reduce((a, b) => a + b, 0)}</div>
+      </div>
+      <div class="stat-box">
+        <div><b>إجمالي النزلاء</b></div>
+        <div class="stat-number">${countGuests()}</div>
+      </div>
+      <div class="stat-box">
+        <div><b>الغرف المشغولة</b></div>
+        <div class="stat-number">${countOccupiedRooms()}</div>
+      </div>
     </div>
   `;
   document.getElementById('search').style.display = 'none';
@@ -224,17 +231,8 @@ function countGuests() {
   return Object.values(data).flat().filter(x => x.name).length;
 }
 
-function countRanks(type) {
-  const officerRanks = ranks[1];
-  return Object.values(data).flat().filter(x => {
-    if (!x.rank) return false;
-    if (type === 'ضباط') return officerRanks.includes(x.rank);
-    else return !officerRanks.includes(x.rank);
-  }).length;
-}
-
-function countCars() {
-  return Object.values(data).flat().filter(x => x.plate && x.plate.trim() !== '').length;
+function countOccupiedRooms() {
+  return Object.values(data).filter(room => room.some(occ => occ.name)).length;
 }
 
 function loadFloor(floor) {
@@ -280,7 +278,7 @@ function createRoomCard(roomKey, roomNumber, floor) {
 
   const title = document.createElement('div');
   title.className = 'room-title';
-  title.textContent = `غـرفـة | ${roomNumber}`;
+  title.innerHTML = `<b>غـرفـة | ${roomNumber}</b>`;
 
   const toggle = document.createElement('button');
   toggle.className = 'toggle-btn';
@@ -357,7 +355,7 @@ function exportData() {
     }
   });
   const newWindow = window.open('', '', 'width=800,height=600');
-  newWindow.document.write(`<pre style="direction: rtl; font-family: Arial">${output}</pre>`);
+  newWindow.document.write(`<pre style="direction: rtl; font-family: Arial"><b>${output}</b></pre>`);
 }
 
 loadMain();
