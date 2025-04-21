@@ -1,195 +1,394 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مبنى رابطة العالم الإسلامي</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<title>مـبـنى رابـطـة الـعـالـم الإسـلامـي</title>
+<style>
+* {
+  font-weight: bold;
+}
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #1e1e1e;
+  color: white;
+  margin: 0;
+  padding: 20px;
+}
+h2 {
+  text-align: center;
+  font-size: 28px;
+}
+.floor-selection {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0 15px;
+  font-size: 18px;
+}
+.floor-btn {
+  padding: 10px 18px;
+  background-color: #444;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.floor-btn:hover {
+  background-color: #666;
+}
+#main-btn {
+  font-size: 19px;
+  padding: 12px 20px;
+  background-color: #0b2545;
+  color: white;
+}
+#main-btn:hover {
+  background-color: #133b5c;
+}
+#search {
+  display: none;
+  margin: 0 auto 10px;
+  padding: 6px 10px;
+  width: 200px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #2c2c2c;
+  color: white;
+}
+#export-btn {
+  display: none;
+  margin: 0 auto 20px;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #0b2545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#export-btn:hover {
+  background-color: #133b5c;
+}
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  justify-items: center;
+  margin-top: 40px;
+}
+.stat-box {
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  padding: 15px;
+  width: 160px;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.stat-number {
+  font-size: 28px;
+  margin: 10px 0 0;
+}
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.room-card {
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  width: calc(25% - 10px);
+  padding: 10px;
+  box-sizing: border-box;
+  transition: 0.3s ease;
+  position: relative;
+}
+.room-card.open .occupants {
+  display: block;
+}
+.room-title {
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 20px; /* تعديل حجم الخط */
+}
+.toggle-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.occupants {
+  display: none;
+  margin-top: 10px;
+}
+.occupant {
+  margin-bottom: 10px;
+  background-color: #3b3b3b;
+  padding: 5px;
+  border-radius: 4px;
+}
+.occupant input,
+.occupant select {
+  width: 100%;
+  padding: 5px;
+  background-color: #2c2c2c;
+  border: 1px solid #555;
+  color: white;
+  text-align: center;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+.status-dots {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: green;
+}
+.dot.filled {
+  background-color: red;
+}
 
-    .container {
-      width: 90%;
-      margin: 0 auto;
-      padding-top: 20px;
-    }
+/* تعديل لزيادة حجم الخط والكروت على الشاشات الكبيرة */
+@media (min-width: 1024px) {
+  h2 {
+    font-size: 36px; /* زيادة حجم العنوان */
+  }
+  .floor-btn {
+    font-size: 20px; /* زيادة حجم النص في أزرار الطوابق */
+    padding: 12px 20px; /* زيادة الحشو */
+  }
+  .room-card {
+    width: calc(33.33% - 10px); /* زيادة حجم الكروت ليأخذوا مساحة أكبر */
+    padding: 15px; /* زيادة الحشو داخل الكرت */
+  }
+  .room-title {
+    font-size: 24px; /* زيادة حجم النص في عنوان الكرت */
+  }
+  .stat-box {
+    font-size: 18px; /* زيادة حجم النص في الإحصائيات */
+  }
+  .stat-number {
+    font-size: 32px; /* زيادة حجم الأرقام في الإحصائيات */
+  }
+}
 
-    .floor-btn, #main-btn, #export-btn {
-      background-color: #0044cc;
-      color: white;
-      font-size: 16px;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      margin: 10px;
-      border-radius: 5px;
-    }
-
-    .floor-btn:hover, #main-btn:hover, #export-btn:hover {
-      background-color: #003399;
-    }
-
-    .stat-box {
-      display: inline-block;
-      width: 32%;
-      margin: 10px 1%;
-      padding: 15px;
-      background-color: #333;
-      color: white;
-      border-radius: 5px;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 30px;
-      font-weight: bold;
-    }
-
-    .room-card {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-      text-align: center;
-      color: #333;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    #searchInput {
-      padding: 8px;
-      font-size: 16px;
-    }
-
-    .toggle-btn {
-      background-color: #666;
-      color: white;
-      font-size: 18px;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .toggle-btn:hover {
-      background-color: #444;
-    }
-
-    .room-number {
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .guest-input {
-      font-size: 16px;
-    }
-
-    @media (min-width: 1025px) {
-      body {
-        font-size: 20px;
-      }
-
-      .floor-btn, #main-btn, #export-btn {
-        font-size: 20px;
-        padding: 14px 24px;
-      }
-
-      h2 {
-        font-size: 32px;
-      }
-
-      .room-card {
-        font-size: 18px;
-      }
-
-      input, select {
-        font-size: 18px !important;
-      }
-
-      .stat-number {
-        font-size: 32px;
-      }
-
-      .stat-box {
-        font-size: 20px;
-        padding: 20px;
-      }
-
-      .toggle-btn {
-        font-size: 24px;
-      }
-
-      .room-number {
-        font-size: 22px;
-      }
-
-      .guest-input {
-        font-size: 18px !important;
-      }
-
-      #searchInput {
-        font-size: 18px;
-      }
-    }
-  </style>
+@media (max-width: 768px) {
+  .room-card {
+    width: 100%;
+  }
+  .stats-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <button id="main-btn">الـصـفـحـة الـرئـيـسـية</button>
-    <button class="floor-btn">الطابق الأول</button>
-    <button class="floor-btn">الطابق الثاني</button>
-    <button class="floor-btn">الطابق الثالث</button>
-    <button class="floor-btn">الطابق الرابع</button>
 
-    <div class="stat-box">
-      <div class="stat-number">100</div>
-      <div>الغرف المتاحة</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number">80</div>
-      <div>الغرف المشغولة</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number">50</div>
-      <div>الغرف المعدة للاستخدام</div>
-    </div>
+<h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
 
-    <h2>تقرير الغرف</h2>
-    <div class="room-card">
-      <div class="room-number">غرفة 101</div>
-      <input class="guest-input" type="text" placeholder="اسم الضيف">
-      <input class="guest-input" type="text" placeholder="رقم الجوال">
-      <select class="guest-input">
-        <option>جندي</option>
-        <option>عريف</option>
-        <option>رقيب</option>
+<div class="floor-selection">
+  <button id="main-btn" class="floor-btn" onclick="loadMain()">الـصـفـحـة الـرئـيـسـية</button>
+</div>
+
+<div class="floor-selection">
+  <button class="floor-btn" onclick="loadFloor(1)">الــطـــابــق الأول</button>
+  <button class="floor-btn" onclick="loadFloor(2)">الـطـابـق الـثــانـي</button>
+  <button class="floor-btn" onclick="loadFloor(3)">الـطـابـق الـثـالـث</button>
+  <button class="floor-btn" onclick="loadFloor(4)">الـطــابــق الـرابـع</button>
+  <button class="floor-btn" onclick="loadFloor(0)">الـجـمـيـع</button>
+</div>
+
+<input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
+<button id="export-btn" onclick="exportData()">إصـدار تـقـريـر</button>
+
+<div id="cards" class="cards-container"></div>
+
+<script>
+let currentFloor = 1;
+const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
+const occupantsPerRoom = { 1: 3, 2: 3, 3: 8, 4: 8 };
+const ranks = {
+  1: ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'],
+  2: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب', 'رقيب أول', 'رئيس رقباء'],
+  3: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب'],
+  4: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب']
+};
+let data = JSON.parse(localStorage.getItem('housingData') || '{}');
+
+function saveToStorage() {
+  localStorage.setItem('housingData', JSON.stringify(data));
+}
+
+function loadMain() {
+  document.getElementById('cards').innerHTML = `
+    <div class="stats-container">
+      <div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">408</div></div>
+      <div class="stat-box"><div>الغرف الشاغرة</div><div class="stat-number">${408 - countGuests()}</div></div>
+      <div class="stat-box"><div>الغرف المشغولة</div><div class="stat-number">${countGuests()}</div></div>
+      <div class="stat-box"><div>الضباط</div><div class="stat-number">${countRanks('ضباط')}</div></div>
+      <div class="stat-box"><div>الأفراد</div><div class="stat-number">${countRanks('أفراد')}</div></div>
+      <div class="stat-box"><div>السيارات</div><div class="stat-number">${countCars()}</div></div>
+    </div>
+  `;
+  document.getElementById('search').style.display = 'none';
+  document.getElementById('export-btn').style.display = 'none';
+}
+
+function countGuests() {
+  return Object.values(data).flat().filter(x => x.name).length;
+}
+
+function countRanks(type) {
+  const officerRanks = ranks[1];
+  return Object.values(data).flat().filter(x => {
+    if (!x.rank) return false;
+    if (type === 'ضباط') return officerRanks.includes(x.rank);
+    else return !officerRanks.includes(x.rank);
+  }).length;
+}
+
+function countCars() {
+  return Object.values(data).flat().filter(x => x.plate && x.plate.trim() !== '').length;
+}
+
+function loadFloor(floor) {
+  currentFloor = floor;
+  document.getElementById('search').value = '';
+  const container = document.getElementById('cards');
+  container.innerHTML = '';
+
+  if (floor === 0) {
+    document.getElementById('search').style.display = 'block';
+    document.getElementById('export-btn').style.display = 'block';
+    for (let f = 1; f <= 4; f++) {
+      for (let i = 1; i <= roomCounts[f]; i++) {
+        const roomNumber = `${f}${i.toString().padStart(2, '0')}`;
+        const roomKey = `room-${roomNumber}`;
+        if (!data[roomKey]) {
+          data[roomKey] = Array.from({ length: occupantsPerRoom[f] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
+        }
+        const card = createRoomCard(roomKey, roomNumber, f);
+        container.appendChild(card);
+      }
+    }
+  } else {
+    document.getElementById('search').style.display = 'none';
+    document.getElementById('export-btn').style.display = 'none';
+    for (let i = 1; i <= roomCounts[floor]; i++) {
+      const roomNumber = `${floor}${i.toString().padStart(2, '0')}`;
+      const roomKey = `room-${roomNumber}`;
+      if (!data[roomKey]) {
+        data[roomKey] = Array.from({ length: occupantsPerRoom[floor] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
+      }
+      const card = createRoomCard(roomKey, roomNumber, floor);
+      container.appendChild(card);
+    }
+  }
+  saveToStorage();
+}
+
+function createRoomCard(roomKey, roomNumber, floor) {
+  const card = document.createElement('div');
+  card.classList.add('room-card');
+  card.setAttribute('data-key', roomKey);
+
+  const title = document.createElement('div');
+  title.classList.add('room-title');
+  title.textContent = `غرفة ${roomNumber}`;
+  card.appendChild(title);
+
+  const toggleButton = document.createElement('button');
+  toggleButton.classList.add('toggle-btn');
+  toggleButton.textContent = '+';
+  toggleButton.onclick = () => toggleRoomDetails(roomKey, card);
+  card.appendChild(toggleButton);
+
+  const occupantsDiv = document.createElement('div');
+  occupantsDiv.classList.add('occupants');
+  data[roomKey].forEach((occupant, index) => {
+    const occupantDiv = document.createElement('div');
+    occupantDiv.classList.add('occupant');
+    occupantDiv.innerHTML = `
+      <input type="text" placeholder="الاسم" value="${occupant.name}" onchange="saveOccupant('${roomKey}', ${index}, 'name', this.value)">
+      <input type="text" placeholder="رقم التواصل" value="${occupant.phone}" onchange="saveOccupant('${roomKey}', ${index}, 'phone', this.value)">
+      <select onchange="saveOccupant('${roomKey}', ${index}, 'rank', this.value)">
+        <option value="">الرتبة</option>
+        ${ranks[floor].map(rank => `<option value="${rank}" ${occupant.rank === rank ? 'selected' : ''}>${rank}</option>`).join('')}
       </select>
-    </div>
+      <input type="text" placeholder="رقم اللوحة" value="${occupant.plate}" onchange="saveOccupant('${roomKey}', ${index}, 'plate', this.value)">
+    `;
+    occupantsDiv.appendChild(occupantDiv);
+  });
+  card.appendChild(occupantsDiv);
 
-    <div>
-      <input id="searchInput" type="text" placeholder="ابحث عن غرفة أو ضيف">
-    </div>
+  return card;
+}
 
-    <button id="export-btn">إصـدار تـقـريـر</button>
-  </div>
+function toggleRoomDetails(roomKey, card) {
+  const occupantsDiv = card.querySelector('.occupants');
+  const toggleButton = card.querySelector('.toggle-btn');
+  if (occupantsDiv.style.display === 'block') {
+    occupantsDiv.style.display = 'none';
+    toggleButton.textContent = '+';
+  } else {
+    occupantsDiv.style.display = 'block';
+    toggleButton.textContent = '-';
+  }
+}
+
+function saveOccupant(roomKey, index, field, value) {
+  data[roomKey][index][field] = value;
+  saveToStorage();
+}
+
+function searchRooms() {
+  const query = document.getElementById('search').value.toLowerCase();
+  const roomCards = document.querySelectorAll('.room-card');
+  roomCards.forEach(card => {
+    const roomKey = card.getAttribute('data-key');
+    const occupants = data[roomKey];
+    const matches = occupants.some(occupant =>
+      occupant.name.toLowerCase().includes(query) ||
+      occupant.phone.toLowerCase().includes(query) ||
+      occupant.rank.toLowerCase().includes(query) ||
+      occupant.plate.toLowerCase().includes(query)
+    );
+    card.style.display = matches ? '' : 'none';
+  });
+}
+
+function exportData() {
+  const wb = XLSX.utils.book_new();
+  const ws_data = [];
+
+  Object.entries(data).forEach(([roomKey, occupants]) => {
+    occupants.forEach((occupant, index) => {
+      ws_data.push([
+        roomKey, index + 1, occupant.name, occupant.phone, occupant.rank, occupant.plate
+      ]);
+    });
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(ws_data);
+  XLSX.utils.book_append_sheet(wb, ws, 'بيانات الغرف');
+  XLSX.writeFile(wb, 'بيانات_الغرف.xlsx');
+}
+
+loadMain();
+</script>
 </body>
 </html>
