@@ -297,10 +297,10 @@ title.textContent = `غـرفـة | ${roomNumber}`;
 
 const toggle = document.createElement('button');
 toggle.className = 'toggle-btn';
-toggle.innerHTML = '▼';
+toggle.innerHTML = '+';
 toggle.onclick = () => {
 card.classList.toggle('open');
-toggle.innerHTML = card.classList.contains('open') ? '▲' : '▼';
+toggle.innerHTML = card.classList.contains('open') ? '-' : '+';
 };
 
 const dots = document.createElement('div');
@@ -358,21 +358,40 @@ if (match) card.classList.remove('open');
 }
 
 function exportData() {
-let output = '';
-Object.keys(data).forEach(room => {
-if (data[room].some(occ => occ.name)) {
-output += `${room.replace('room-', 'غرفة | ')}:\n`;
-data[room].forEach((occ, i) => {
-if (occ.name) {
-output += ` ${i + 1}- الاسم: ${occ.name}, الجوال: ${occ.phone}, الرتبة: ${occ.rank}, اللوحة: ${occ.plate}\n`;
-}
-});
-}
-});
-const newWindow = window.open('', '', 'width=800,height=600');
-newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold;">${output}</pre>`);
-}
+  const now = new Date();
 
+  // التاريخ الميلادي بصيغة: 2025/04/23
+  const gregorianDate = now.toLocaleDateString('en-GB').split('/').reverse().join('/');
+
+  // اليوم باللغة العربية
+  const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+
+  // الوقت بصيغة: الساعة | 4:23 AM
+  const hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const formattedHour = hours % 12 || 12;
+  const formattedTime = `الساعة | ${formattedHour}:${minutes} ${period}`;
+
+  let output = `تقرير مبنى رابطة العالم الإسلامي\n`;
+  output += `التاريخ | ${gregorianDate}\n`;
+  output += `اليوم | ${dayName}\n`;
+  output += `${formattedTime}\n\n`;
+
+  Object.keys(data).forEach(room => {
+    if (data[room].some(occ => occ.name)) {
+      output += `• غرفة | ${room.replace('room-', '')}\n`;
+      data[room].forEach(occ => {
+        if (occ.name) {
+          output += `الاسم: ${occ.name}\nالرقم: ${occ.phone}\nالرتبة: ${occ.rank}\nاللوحة: ${occ.plate}\n\n`;
+        }
+      });
+    }
+  });
+
+  const newWindow = window.open('', '', 'width=800,height=600');
+  newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold; white-space: pre-wrap;">${output}</pre>`);
+}
 loadMain();
 </script>
 
