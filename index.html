@@ -5,12 +5,29 @@
 <title>مـبـنى رابـطـة الـعـالـم الإسـلامـي</title>
 <style>
 body {
-font-family: 'Arial', sans-serif;
-background-color: #1e1e1e;
-color: white;
-margin: 0;
-padding: 20px;
-font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  background-color: white; /* تغيير اللون إلى الأبيض */
+  color: white; /* تغيير لون النص إلى الأسود ليتناسب مع الخلفية البيضاء */
+  margin: 0;
+  padding: 20px;
+  font-weight: bold;
+}
+/* تغيير لون النصوص داخل الكروت */
+.card,
+.stats-box {
+  color: white;
+}
+
+/* نصوص العناوين أو الإحصائيات */
+.stats-title,
+.stats-number {
+  color: white;
+}
+
+/* نصوص الغرف داخل الكروت */
+.card .room-number,
+.card .guest-info {
+  color: white;
 }
 h2,
 .floor-btn,
@@ -183,6 +200,12 @@ grid-template-columns: repeat(1, 1fr);
 </head>
 <body>
 
+<div style="position: absolute; top: 5px; left: 5px; z-index: 999;">
+  <img src="logo.png" alt="شعار" style="max-width: 200px; height: auto;">
+</div>
+<div style="position: fixed; top: 0; right: 0; z-index: 999;">
+  <img src="Logo.png1" alt="شعار" style="max-width: 160px; height: auto; margin: 0;">
+</div>
 <h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
 
 <div class="floor-selection">
