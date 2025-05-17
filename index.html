@@ -309,6 +309,11 @@ grid-template-columns: repeat(1, 1fr);
 <button class="floor-btn" onclick="loadFloor(0)">الـجـمـيـع</button>
 </div>
 
+
+<button id="temp-clear-btn" onclick="clearTempData()" style="margin: 10px auto; display: block; background-color: #a00; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+  حذف المعلومات المؤقتة
+</button>
+
 <input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
 <button id="export-btn" onclick="exportData()">إصـدار تـقـريـر</button>
 
@@ -525,6 +530,14 @@ function exportData() {
   const newWindow = window.open('', '', 'width=800,height=600');
   newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold; white-space: pre-wrap;">${output}</pre>`);
 }
+
+function clearTempData() {
+  if (confirm("هل أنت متأكد أنك تريد حذف جميع المعلومات المؤقتة؟")) {
+    localStorage.removeItem('housingData');
+    location.reload();
+  }
+}
+
 loadMain();
 </script>
 
