@@ -292,7 +292,7 @@ grid-template-columns: repeat(1, 1fr);
 </head>
 <body>
 <div style="position: fixed; top: 10px; left: 10px; z-index: 999;">
-  <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار" style="max-width: 160px; height: auto; margin: 0;">
+  <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار" style="max-width: 250px; height: auto; margin: 0;">
 </div>
 
 <h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
@@ -317,7 +317,7 @@ grid-template-columns: repeat(1, 1fr);
 <script>
 let currentFloor = 1;
 const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
-const occupantsPerRoom = { 1: 3, 2: 3, 3: 8, 4: 8 };
+const occupantsPerRoom = { 1: 3, 2: 3, 3: 16, 4: 16 };
 const ranks = {
 1: ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'],
 2: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب', 'رقيب أول', 'رئيس رقباء'],
@@ -331,18 +331,38 @@ localStorage.setItem('housingData', JSON.stringify(data));
 }
 
 function loadMain() {
-document.getElementById('cards').innerHTML = `
-<div class="stats-container">
-<div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">408</div></div>
-<div class="stat-box"><div>الغرف الشاغرة</div><div class="stat-number">${408 - countGuests()}</div></div>
-<div class="stat-box"><div>الغرف المشغولة</div><div class="stat-number">${countGuests()}</div></div>
-<div class="stat-box"><div>الضباط</div><div class="stat-number">${countRanks('ضباط')}</div></div>
-<div class="stat-box"><div>الأفراد</div><div class="stat-number">${countRanks('أفراد')}</div></div>
-<div class="stat-box"><div>السيارات</div><div class="stat-number">${countCars()}</div></div>
-</div>
-`;
-document.getElementById('search').style.display = 'none';
-document.getElementById('export-btn').style.display = 'none';
+  let totalCapacity = 0;
+  let filled = 0;
+  let officerCount = 0;
+  let enlistedCount = 0;
+  let carCount = 0;
+  const officerRanks = ranks[1];
+
+  Object.keys(data).forEach(roomKey => {
+    const room = data[roomKey];
+    totalCapacity += room.length;
+    room.forEach(person => {
+      if (person.name) filled++;
+      if (person.plate && person.plate.trim() !== '') carCount++;
+      if (person.rank) {
+        if (officerRanks.includes(person.rank)) officerCount++;
+        else enlistedCount++;
+      }
+    });
+  });
+
+  document.getElementById('cards').innerHTML = `
+    <div class="stats-container">
+      <div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">${totalCapacity}</div></div>
+      <div class="stat-box"><div>الغرف الشاغرة</div><div class="stat-number">${totalCapacity - filled}</div></div>
+      <div class="stat-box"><div>الغرف المشغولة</div><div class="stat-number">${filled}</div></div>
+      <div class="stat-box"><div>الضباط</div><div class="stat-number">${officerCount}</div></div>
+      <div class="stat-box"><div>الأفراد</div><div class="stat-number">${enlistedCount}</div></div>
+      <div class="stat-box"><div>السيارات</div><div class="stat-number">${carCount}</div></div>
+    </div>
+  `;
+  document.getElementById('search').style.display = 'none';
+  document.getElementById('export-btn').style.display = 'none';
 }
 
 function countGuests() {
