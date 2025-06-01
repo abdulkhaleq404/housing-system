@@ -326,7 +326,7 @@ const ranks = {
 3: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب'],
 4: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب']
 };
-let data = {
+let data = JSON.parse(localStorage.getItem('housingData') || `{
   "room-101": [
     {
       "name": "سعود محمد التميمي",
@@ -4039,7 +4039,7 @@ let data = {
       "plate": ""
     }
   ]
-};
+}`);
 
 function saveToStorage() {
 localStorage.setItem('housingData', JSON.stringify(data));
@@ -4069,8 +4069,8 @@ function loadMain() {
   document.getElementById('cards').innerHTML = `
     <div class="stats-container">
       <div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">${totalCapacity}</div></div>
-      <div class="stat-box"><div>الغرف الشاغرة</div><div class="stat-number">${totalCapacity - filled}</div></div>
-      <div class="stat-box"><div>الغرف المشغولة</div><div class="stat-number">${filled}</div></div>
+      <div class="stat-box"><div>الطاقة المتاحة للتسكين</div><div class="stat-number">${totalCapacity - filled}</div></div>
+      <div class="stat-box"><div>عدد الضيوف الحاليين</div><div class="stat-number">${filled}</div></div>
       <div class="stat-box"><div>الضباط</div><div class="stat-number">${officerCount}</div></div>
       <div class="stat-box"><div>الأفراد</div><div class="stat-number">${enlistedCount}</div></div>
       <div class="stat-box"><div>السيارات</div><div class="stat-number">${carCount}</div></div>
