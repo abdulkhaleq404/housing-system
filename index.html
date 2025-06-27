@@ -13,12 +13,16 @@
       font-weight: bold;
       overflow: auto;
     }
+
+    /* الشعار 1 كخلفية */
     body::before {
       content: "";
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image: url('https://raw.githubusercontent.com/abdulkhaleq404/housing-system/main/logopng2.png');
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng2.png');
       background-repeat: no-repeat;
       background-position: center center;
       background-size: 600px auto;
@@ -26,21 +30,51 @@
       z-index: -2;
       pointer-events: none;
     }
+
+    /* الشعار 2 خلف الكروت */
     #logo2 {
       position: fixed;
-      top: 10px; left: 10px;
+      top: 10px;
+      left: 10px;
       z-index: -1;
       opacity: 1;
     }
+
     h2 {
       text-align: center;
       font-size: 28px;
       font-weight: bold;
+      color: black;
       margin-bottom: 10px;
     }
-    #main-btn, .floor-btn, #all-btn, #duplicates-btn, #tasks-btn {
+
+    #main-btn {
+      display: block;
+      margin: 0 auto 10px auto;
+      font-size: 19px;
+      padding: 12px 20px;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    #main-btn:hover {
+      background-color: #133b5c;
+    }
+
+    .floor-selection {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .floor-btn {
       padding: 10px 18px;
-      margin: 5px;
       background-color: #2f2f2f;
       border: none;
       color: white;
@@ -48,18 +82,32 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    #main-btn { font-size: 19px; background-color: #0b2545; }
-    #main-btn:hover { background-color: #133b5c; }
-    .floor-selection, .secondary-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .floor-btn:hover, #all-btn:hover, #duplicates-btn:hover, #tasks-btn:hover {
+    .floor-btn:hover {
       background-color: #3a3a3a;
     }
+
+    .secondary-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    #all-btn, #duplicates-btn {
+      padding: 10px 18px;
+      background-color: #2f2f2f;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    #all-btn:hover, #duplicates-btn:hover {
+      background-color: #3a3a3a;
+    }
+
     #search {
-      display: none;
+      display: none; /* إخفاؤه بشكل افتراضي */
       margin: 10px auto;
       padding: 6px 10px;
       width: 200px;
@@ -69,6 +117,7 @@
       background-color: #1e1e1e;
       color: white;
     }
+
     #export-btn, #report-link-btn {
       display: none;
       margin: 10px auto;
@@ -79,10 +128,12 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      text-align: center;
     }
     #export-btn:hover, #report-link-btn:hover {
       background-color: #133b5c;
     }
+
     .stats-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -90,6 +141,7 @@
       justify-items: center;
       margin-top: 20px;
     }
+
     .stat-box {
       background-color: #2c2c2c;
       border-radius: 8px;
@@ -97,10 +149,15 @@
       width: 160px;
       text-align: center;
       font-size: 16px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    .stat-number { font-size: 28px; margin-top: 10px; }
+
+    .stat-number {
+      font-size: 28px;
+      margin: 10px 0 0;
+    }
+
     .cards-container {
       display: flex;
       flex-wrap: wrap;
@@ -108,49 +165,81 @@
       justify-content: center;
       margin-top: 20px;
     }
+
     .room-card {
       background-color: #2c2c2c;
       border-radius: 8px;
       width: calc(25% - 10px);
       padding: 10px;
       box-sizing: border-box;
+      transition: 0.3s ease;
       position: relative;
       color: white;
     }
-    .room-title { font-weight: bold; text-align: center; margin-bottom: 5px; }
-    .toggle-btn {
-      position: absolute; top: 10px; left: 10px;
-      background: none; color: white; border: none; font-size: 20px; cursor: pointer;
+    .room-card .room-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-align: center;
+      color: white;
     }
-    .occupants { display: none; margin-top: 10px; }
-    .occupant {
+    .room-card .toggle-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .room-card .occupants {
+      display: none;
+      margin-top: 10px;
+    }
+    .room-card .occupant {
+      margin-bottom: 10px;
       background-color: #333;
       padding: 5px;
       border-radius: 4px;
-      margin-bottom: 10px;
+      color: white;
     }
-    .occupant input, .occupant select {
+    .room-card .occupant input,
+    .room-card .occupant select {
       width: 100%;
-      margin-bottom: 5px;
       padding: 5px;
-      border-radius: 4px;
-      border: 1px solid #555;
       background-color: #2f2f2f;
+      border: 1px solid #555;
       color: white;
       text-align: center;
       box-sizing: border-box;
+      margin-bottom: 5px;
     }
-    .status-dots {
-      display: flex; gap: 4px; justify-content: center; margin-bottom: 5px;
+    .room-card .status-dots {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      margin-bottom: 5px;
     }
-    .dot {
-      width: 10px; height: 10px; border-radius: 50%; background-color: green;
+    .room-card .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: green;
     }
-    .dot.filled { background-color: red; }
-    .occupied-count { text-align: center; margin-bottom: 5px; }
+    .room-card .dot.filled {
+      background-color: red;
+    }
+    .room-card .occupied-count {
+      text-align: center;
+      margin-bottom: 5px;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* تنسيق صف المتكررات: 3 كروت في الصف */
     .duplicates-container {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-top: 20px;
     }
@@ -159,73 +248,176 @@
       padding: 10px;
       border-radius: 8px;
       color: white;
-      white-space: pre-wrap;
+      white-space: pre-wrap; /* للحفاظ على التنسيق */
       text-align: right;
     }
-    .tasks-header { text-align: center; margin-bottom: 10px; }
+
+    @media (max-width: 768px) {
+      .room-card {
+        width: 100%;
+      }
+      .stats-container {
+        grid-template-columns: repeat(1, 1fr);
+      }
+      .duplicates-container {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  
+    /* تنسيقات لوحة المهام */
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
     .tasks-header button {
-      font-size: 24px; width: 40px; height: 40px; border-radius: 50%;
-      background-color: #0b2545; color: white; border: none; cursor: pointer;
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
     .tasks-container {
-      display: grid; grid-template-columns: repeat(3,minmax(200px,1fr));
-      gap: 15px; margin-top: 10px; justify-items: center;
+      display: flex; flex-direction: row; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
     }
     .task-card {
-      background-color: #2c2c2c; color: white; padding: 15px; border-radius: 8px;
-      text-align: center;
+      background-color: white; color: black; padding: 10px;
+      border-radius: 8px;
+      color: white;
     }
-    .task-card input, .task-card textarea {
-      width: 100%; margin-bottom: 8px; padding: 5px; border-radius: 4px;
-      border: 1px solid #555; background-color: #333; color: white;
+    .task-card input,
+    .task-card textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #333;
+      color: white;
       box-sizing: border-box;
     }
-    .task-card textarea { height: 60px; resize: none; }
-    .task-actions { display: flex; justify-content: space-between; }
-    .task-actions button {
-      flex: 1; margin: 0 5px; padding: 6px; border: none; border-radius: 4px;
-      background-color: #444; color: white; cursor: pointer;
+    .task-card textarea {
+      height: 60px;
+      resize: none;
     }
-    .task-actions .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #ccc; margin-left: 6px; vertical-align: middle; }
-    .task-buttons { text-align: center; margin-top: 10px; }
-    .save-btn { background-color: #0b2545; color:white; padding: 6px 12px; border:none; border-radius:4px; cursor:pointer; margin:0 5px; }
-    .delete-btn { background-color: #c62828; color:white; padding: 6px 12px; border:none; border-radius:4px; cursor:pointer; margin:0 5px; }
-  </style>
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .task-actions button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+    }
+    .task-actions .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+      background-color: #ccc;
+      vertical-align: middle;
+    }
+
+  
+    /* تنسيق كرت الصفحة الرئيسية يبقى */
+    /* تنسيق لوحة المهام */
+    .cards-container .tasks-header {
+      grid-column: 1 / -1 !important;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tasks-container {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+      gap: 15px !important;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .task-card {
+      background-color: #2c2c2c !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+    .task-buttons {
+      text-align: center !important;
+      margin-top: 10px !important;
+    }
+    /* إزالة أي تموضع ثابت سابق للزر */
+    .tasks-header {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
+
+
+    /* زر الحذف تحت خيارات الحالة */
+    .task-delete {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+</style>
 </head>
 <body>
+  <!-- شاشة تسجيل الدخول -->
   <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
     <h2>تسجيل الدخول</h2>
     <input id="login-username" type="text" placeholder="Username" style="padding:8px; margin:8px 0; width:250px;"/>
     <input id="login-password" type="password" placeholder="Password" style="padding:8px; margin:8px 0; width:250px;"/>
     <button id="login-button" style="padding:8px 16px; margin:8px 0;">دخول</button>
   </div>
+  <!-- محتوى التطبيق -->
   <div id="app" style="display:none;">
-    <div id="logo2">
-      <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/main/logopng3.png" alt="شعار ثانوي" style="max-width:250px;height:auto;">
-    </div>
-    <h2>مبنى رابطة العالم الإسلامي</h2>
-    <button id="main-btn">الصفحة الرئيسية</button>
-    <div class="floor-selection">
-      <button class="floor-btn" data-floor="1">الطابق الأول</button>
-      <button class="floor-btn" data-floor="2">الطابق الثاني</button>
-      <button class="floor-btn" data-floor="3">الطابق الثالث</button>
-      <button class="floor-btn" data-floor="4">الطابق الرابع</button>
-    </div>
-    <div class="secondary-buttons">
-      <button id="all-btn">الجميع</button>
-      <button id="duplicates-btn">المتكررات</button>
-      <button id="tasks-btn">المهام</button>
-    </div>
-    <input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
-    <button id="export-btn" onclick="exportData()">تقرير بيانات الغرف</button>
-    <button id="report-link-btn" onclick="exportBuildingReport()">تقرير مبنى الرابطة</button>
-    <div id="cards" class="cards-container"></div>
+
+  <div id="logo2">
+    <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار ثانوي" style="max-width: 250px; height: auto;">
   </div>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzfomXUIag_T5wunhBe18KRYIP4LGCqU4jtnbGMxT_bYIHQkoTcxeluRs4fQ8AjPCUK/exec';
-    const ADMIN_USER = 'abdulkhaleq';
-    const ADMIN_PASS = 'Abdu1kha1eq#404seS1';
+  <h2>مبنى رابطة العالم الإسلامي</h2>
+  <button id="main-btn" onclick="loadMain()">الصفحة الرئيسية</button>
+
+  <div class="floor-selection">
+    <button class="floor-btn" onclick="loadFloor(1)">الطابق الأول</button>
+    <button class="floor-btn" onclick="loadFloor(2)">الطابق الثاني</button>
+    <button class="floor-btn" onclick="loadFloor(3)">الطابق الثالث</button>
+    <button class="floor-btn" onclick="loadFloor(4)">الطابق الرابع</button>
+  </div>
+
+  <div class="secondary-buttons">
+    <button id="all-btn" onclick="loadFloor(0)">الجميع</button>
+    <button id="duplicates-btn" onclick="loadDuplicates()">المتكررات</button>
+    <button id="tasks-btn" onclick="loadTasks()">المهام</button>
+  </div>
+
+  <input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
+  <button id="export-btn" onclick="exportData()">تقرير بيانات الغرف</button>
+  <button id="report-link-btn" onclick="exportBuildingReport()">تقرير مبنى الرابطة</button>
+
+  <div id="cards" class="cards-container"></div>
+
+  
+<script>
+// Authentication
+const ADMIN_USER = 'abdulkhaleq';
+const ADMIN_PASS = 'Abdu1kha1eq#404seS1';
+
 
     let data = {};
     let tasks = [];
@@ -238,205 +430,674 @@
         if (!data[key]) data[key] = [];
         data[key].push({ name: g.name, phone: g.phone, rank: g.info, plate: '', grade: '' });
       });
-      // Ensure at least 3 slots per room
       Object.keys(data).forEach(k => {
-        while (data[k].length < 3) data[k].push({ name:'',phone:'',rank:'',plate:'',grade:'' });
+        while (data[k].length < 3) data[k].push({ name: '', phone: '', rank: '', plate: '', grade: '' });
       });
-
-      // Load tasks
       tasks = await fetch(`${API_URL}?sheet=tasks`).then(r=>r.json());
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const loginBtn = document.getElementById('login-button');
-      loginBtn.onclick = async () => {
-        const u = document.getElementById('login-username').value;
-        const p = document.getElementById('login-password').value;
-        if (u===ADMIN_USER && p===ADMIN_PASS) {
-          document.getElementById('login-screen').style.display='none';
-          document.getElementById('app').style.display='block';
-          setupHandlers();
+document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('login-button').addEventListener('click', async () => {
+    const user = document.getElementById('login-username').value;
+    const pass = document.getElementById('login-password').value;
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+      sessionStorage.setItem('loggedIn','true');
+      // Load data after login
+      await loadData();
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      await loadData();
           await loadData();
-          loadMain();
-        } else alert('اسم المستخدم أو كلمة المرور غير صحيحة');
-      };
-    });
-
-    function setupHandlers() {
-      document.getElementById('main-btn').onclick = async () => { await loadData(); loadMain(); };
-      document.querySelectorAll('.floor-btn').forEach(b=> {
-        b.onclick = async () => { await loadData(); loadFloor(Number(b.dataset.floor)); };
-      });
-      document.getElementById('all-btn').onclick = async () => { await loadData(); loadFloor(0); };
-      document.getElementById('duplicates-btn').onclick = async () => { await loadData(); loadDuplicates(); };
-      document.getElementById('tasks-btn').onclick = async () => { await loadData(); loadTasks(); };
+    loadMain();
+    } else {
+      alert('اسم المستخدم أو كلمة المرور غير صحيحة');
     }
+  });
+  if (sessionStorage.getItem('loggedIn') === 'true') {
+    await loadData();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    await loadData();
+          await loadData();
+    loadMain();
+  }
+});
+</script>
 
-    function clearCards() { document.getElementById('cards').innerHTML = ''; }
-
+<script>
     function loadMain() {
-      clearCards();
-      document.getElementById('search').style.display='none';
-      document.getElementById('export-btn').style.display='none';
-      document.getElementById('report-link-btn').style.display='none';
-      const rooms = Object.keys(data);
-      let total=0, filled=0, officers=0, enlisted=0, cars=0;
-      const officerRanks=['ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'];
-      rooms.forEach(r => {
-        data[r].forEach(o => {
-          if(o.name){ filled++; total++; 
-            if(officerRanks.includes(o.rank)) officers++; else enlisted++;
-            if(o.plate) cars++;
-          } else total++;
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('export-btn').style.display = 'none';
+      document.getElementById('report-link-btn').style.display = 'none';
+
+      let totalCapacity = 0;
+      let filled = 0;
+      let officerCount = 0;
+      let enlistedCount = 0;
+      let carCount = 0;
+      const officerRanks = ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'];
+
+      Object.keys(data).forEach(roomKey => {
+        const room = data[roomKey];
+        totalCapacity += room.length;
+        room.forEach(person => {
+          if (person.name) filled++;
+          if (person.rank) {
+            if (officerRanks.includes(person.rank)) officerCount++;
+            else enlistedCount++;
+          }
+          if (person.plate && person.plate.trim() !== '') carCount++;
         });
       });
-      const stats=[
-        ['السعة الإجمالية', total],
-        ['الطاقة المتاحة للتسكين', total-filled],
-        ['عدد الضيوف الحاليين', filled],
-        ['الضباط', officers],
-        ['الأفراد', enlisted],
-        ['السيارات', cars]
-      ];
-      const container=document.getElementById('cards');
-      const wrap=document.createElement('div');
-      wrap.className='stats-container';
-      stats.forEach(([n,v])=>{
-        const box=document.createElement('div');box.className='stat-box';
-        box.innerHTML=`<div>${n}</div><div class="stat-number">${v}</div>`;
-        wrap.appendChild(box);
-      });
-      container.appendChild(wrap);
+
+      document.getElementById('cards').innerHTML = `
+        <div class="stats-container">
+          <div class="stat-box"><div>السعة الإجمالية</div><div class="stat-number">${totalCapacity}</div></div>
+          <div class="stat-box"><div>الطاقة المتاحة للتسكين</div><div class="stat-number">${totalCapacity - filled}</div></div>
+          <div class="stat-box"><div>عدد الضيوف الحاليين</div><div class="stat-number">${filled}</div></div>
+          <div class="stat-box"><div>الضباط</div><div class="stat-number">${officerCount}</div></div>
+          <div class="stat-box"><div>الأفراد</div><div class="stat-number">${enlistedCount}</div></div>
+          <div class="stat-box"><div>السيارات</div><div class="stat-number">${carCount}</div></div>
+        </div>
+      `;
     }
 
     function loadFloor(floor) {
-      clearCards();
-      const container=document.getElementById('cards');
-      document.getElementById('search').style.display=(floor===0?'block':'none');
-      document.getElementById('export-btn').style.display=(floor===0?'block':'none');
-      document.getElementById('report-link-btn').style.display=(floor===0?'block':'none');
-      const keys=Object.keys(data).sort((a,b)=>parseInt(a.split('-')[1])-parseInt(b.split('-')[1]));
-      keys.forEach(k=>{
-        const fl=Number(k.split('-')[1][0]);
-        if(floor===0||fl===floor) container.appendChild(createRoomCard(k, k.split('-')[1]));
-      });
-    }
+      const container = document.getElementById('cards');
+      container.innerHTML = '';
 
-    function createRoomCard(key, num) {
-      const card=document.createElement('div');card.className='room-card';
-      card.innerHTML=`<div class="room-title">غرفة | ${num}</div>
-        <button class="toggle-btn">+</button>
-        <div class="occupied-count"></div>
-        <div class="status-dots"></div>
-        <div class="occupants"></div>`;
-      const occContainer=card.querySelector('.occupants');
-      const toggle=card.querySelector('.toggle-btn');
-      toggle.onclick=()=>{
-        const show=occContainer.style.display!=='block';
-        occContainer.style.display=show?'block':'none';
-        toggle.textContent=show?'-':'+';
-      };
-      const dotsBox=card.querySelector('.status-dots');
-      data[key].forEach((o,idx)=>{
-        const dot=document.createElement('div');dot.className='dot'+(o.name?' filled':'');
-        dotsBox.appendChild(dot);
-        const div=document.createElement('div');div.className='occupant';
-        div.innerHTML=`<input type="text" placeholder="الإسم" value="${o.name}" oninput="updateField('${key}',${idx},'name',this.value)">
-          <input type="tel" placeholder="رقم الجوال" maxlength="10" value="${o.phone}" oninput="updateField('${key}',${idx},'phone',this.value)">
-          <select onchange="updateField('${key}',${idx},'rank',this.value)">${['','جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'].map(r=>`<option value="${r}"${o.rank===r?' selected':''}>${r}</option>`).join('')}</select>
-          <select onchange="updateField('${key}',${idx},'grade',this.value)">${['','1','2','3','4','5','6','7','8','9','10','11','12','13','14'].map(g=>`<option value="${g}"${o.grade==g?' selected':''}>${g}</option>`).join('')}</select>
-          <input type="text" placeholder="رقم اللوحة" value="${o.plate}" oninput="updateField('${key}',${idx},'plate',this.value)">`;
-        occContainer.appendChild(div);
-      });
-      const occCount=data[key].filter(o=>o.name).length;
-      card.querySelector('.occupied-count').textContent=`${occCount} / ${data[key].length}`;
-      return card;
-    }
+      // إظهار خانة البحث فقط عند الضغط على "الجميع"
+      const searchInput = document.getElementById('search');
+      searchInput.value = '';
+      searchInput.style.display = (floor === 0 ? 'block' : 'none');
 
-    function updateField(room,i,field,val){
-      data[room][i][field]=val;
-    }
+      // إظهار أزرار التقارير فقط عند الضغط على "الجميع"
+      document.getElementById('export-btn').style.display = (floor === 0 ? 'block' : 'none');
+      document.getElementById('report-link-btn').style.display = (floor === 0 ? 'block' : 'none');
 
-    function loadDuplicates(){
-      clearCards();
-      const container=document.createElement('div');container.className='duplicates-container';
-      const nameMap={};
-      Object.keys(data).forEach(room=>{
-        data[room].forEach(o=>{
-          if(o.name){
-            nameMap[o.name]=nameMap[o.name]||new Set();
-            nameMap[o.name].add(room.replace('room-',''));
-          }
-        });
+      // ترتيب مفاتيح الغرف تصاعديًا حسب الرقم
+      const keys = Object.keys(data).sort((a, b) => {
+        const numA = parseInt(a.split('-')[1]);
+        const numB = parseInt(b.split('-')[1]);
+        return numA - numB;
       });
-      Object.entries(nameMap).forEach(([name,rooms])=>{
-        if(rooms.size>1){
-          const card=document.createElement('div');card.className='dup-card';
-          card.textContent=`• تشابه في الاسم\n( ${name} )\nالغرف ( ${[...rooms].join(' - ')} )`;
+
+      // عرض كل الغرف إذا floor = 0، وإلا عرض الطابق المحدد
+      keys.forEach(key => {
+        const fl = parseInt(key.split('-')[1][0]);
+        if (floor === 0 || fl === floor) {
+          const card = createRoomCard(key, key.split('-')[1]);
           container.appendChild(card);
         }
       });
-      clearCards();document.getElementById('cards').appendChild(container);
     }
 
-    function loadTasks(){
-      clearCards();
-      const cards=document.getElementById('cards');
-      const hdr=document.createElement('div');hdr.className='tasks-header';
-      const btn=document.createElement('button');btn.textContent='+';btn.onclick=addTask;
-      hdr.appendChild(btn);cards.appendChild(hdr);
-      const cont=document.createElement('div');cont.className='tasks-container';cards.appendChild(cont);
-      tasks.forEach((t,i)=>renderTask(t,i));
-    }
+    function createRoomCard(roomKey, roomNumber) {
+      const card = document.createElement('div');
+      card.className = 'room-card';
 
-    function addTask(){
-      tasks.unshift({type:'',details:'',status:'pending'});
-      renderAllTasks();
-    }
+      const title = document.createElement('div');
+      title.className = 'room-title';
+      title.textContent = `غرفة | ${roomNumber}`;
 
-    function renderTask(t,i){
-      const cont=document.querySelector('.tasks-container');
-      const card=document.createElement('div');card.className='task-card';
-      card.setAttribute('data-idx',i);
-      card.innerHTML=`<input type="text" placeholder="نوع المهمة" value="${t.type}" onchange="tasks[${i}].type=this.value">
-        <textarea placeholder="التفاصيل" onchange="tasks[${i}].details=this.value">${t.details}</textarea>
-        <div class="task-actions">
-          <button onclick="setTaskStatus(${i},'pending')">تحت المعالجة <span class="dot pending"></span></button>
-          <button onclick="setTaskStatus(${i},'done')">تمت المعالجة <span class="dot done"></span></button>
-        </div>
-        <div class="task-buttons">
-          <button class="save-btn" onclick="saveTask(${i})">حفظ</button>
-          <button class="delete-btn" onclick="deleteTask(${i})">حذف</button>
-        </div>`;
-      cont.appendChild(card);
-      updateTaskStatusDisplay(card,t.status);
-    }
+      const toggle = document.createElement('button');
+      toggle.className = 'toggle-btn';
+      toggle.innerHTML = '+';
+      toggle.onclick = () => {
+        const occContainer = card.querySelector('.occupants');
+        occContainer.style.display = occContainer.style.display === 'block' ? 'none' : 'block';
+        toggle.innerHTML = occContainer.style.display === 'block' ? '-' : '+';
+      };
 
-    function updateTaskStatusDisplay(card,status){
-      card.querySelector('.dot.pending').style.backgroundColor=status==='pending'?'orange':'#ccc';
-      card.querySelector('.dot.done').style.backgroundColor=status==='done'?'green':'#ccc';
-    }
+      const filledCount = data[roomKey].filter(o => o.name).length;
+      const capacity = data[roomKey].length;
+      const occupiedDiv = document.createElement('div');
+      occupiedDiv.className = 'occupied-count';
+      occupiedDiv.textContent = `${filledCount} / ${capacity}`;
 
-    async function saveTask(i){
-      await fetch(`${API_URL}?sheet=tasks`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(tasks[i])
+      const dots = document.createElement('div');
+      dots.className = 'status-dots';
+      data[roomKey].forEach(occ => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (occ.name ? ' filled' : '');
+        dots.appendChild(dot);
       });
-      await loadData(); loadTasks();
+
+      const occContainer = document.createElement('div');
+      occContainer.className = 'occupants';
+      occContainer.style.display = 'none';
+
+      data[roomKey].forEach((occ, idx) => {
+        const occDiv = document.createElement('div');
+        occDiv.className = 'occupant';
+        occDiv.innerHTML = `
+          <input type="text" placeholder="الإسم" value="${occ.name}" oninput="updateField('${roomKey}', ${idx}, 'name', this.value)">
+          <input type="tel" placeholder="رقم الجوال" maxlength="10" value="${occ.phone}" oninput="updateField('${roomKey}', ${idx}, 'phone', this.value)">
+          <select onchange="updateField('${roomKey}', ${idx}, 'rank', this.value)">
+            <option value="">الرتبة</option>
+            ${['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء']
+              .map(rank => `<option value="${rank}" ${occ.rank === rank ? 'selected' : ''}>${rank}</option>`)
+              .join('')}
+          </select>
+          <select onchange="updateField('${roomKey}', ${idx}, 'grade', this.value)">
+            <option value="">المرتبة</option>
+            ${Array.from({length:14}, (_,i)=>i+1).map(n=>`<option value="${n}" ${occ.grade==n? 'selected':''}>${n}</option>`).join('')}
+          </select>
+          <input type="text" placeholder="رقم اللوحة" value="${occ.plate}" oninput="updateField('${roomKey}', ${idx}, 'plate', this.value)">
+        `;
+        occContainer.appendChild(occDiv);
+      });
+
+      card.appendChild(title);
+      card.appendChild(toggle);
+      card.appendChild(occupiedDiv);
+      card.appendChild(dots);
+      card.appendChild(occContainer);
+
+      return card;
     }
 
-    function deleteTask(i){
-      tasks.splice(i,1);
+    function updateField(room, index, field, value) {
+      data[room][index][field] = value;
+      document.querySelectorAll('.room-card').forEach(card => {
+        const rNum = card.querySelector('.room-title').textContent.split('|')[1].trim();
+        const key = 'room-' + rNum;
+        if (key === room) {
+          const occArr = data[room];
+          const filledCount = occArr.filter(o => o.name).length;
+          const capacity = occArr.length;
+          card.querySelector('.occupied-count').textContent = `${filledCount} / ${capacity}`;
+          card.querySelectorAll('.dot').forEach((dot, idx) => {
+            dot.className = occArr[idx].name ? 'dot filled' : 'dot';
+          });
+        }
+      });
+    }
+
+    function searchRooms() {
+      const val = document.getElementById('search').value.trim().toLowerCase();
+      document.querySelectorAll('.room-card').forEach(card => {
+        const rNum = card.querySelector('.room-title').textContent.split('|')[1].trim();
+        const key = 'room-' + rNum;
+        const roomData = data[key];
+        // مقارنة بحالة الأحرف المنخفضة والتحقق من رقم الغرفة
+        const match = roomData.some(occ => {
+          return (occ.name.toLowerCase().includes(val) ||
+                  occ.phone.toLowerCase().includes(val) ||
+                  occ.rank.toLowerCase().includes(val) ||
+                  occ.grade.toLowerCase().includes(val) ||
+                  occ.plate.toLowerCase().includes(val));
+        }) || rNum.includes(val);
+        card.style.display = match ? 'block' : 'none';
+      });
+    }
+
+    function loadDuplicates() {
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('export-btn').style.display = 'none';
+      document.getElementById('report-link-btn').style.display = 'none';
+      const container = document.getElementById('cards');
+      container.innerHTML = '<div class="duplicates-container" id="dup-container"></div>';
+      const dupContainer = document.getElementById('dup-container');
+
+      // تشابه الأسماء فقط
+      const nameCount = {};
+      Object.keys(data).forEach(room => {
+        data[room].forEach(occ => {
+          if (occ.name) nameCount[occ.name] = (nameCount[occ.name] || []).concat(room);
+        });
+      });
+
+      Object.keys(nameCount).forEach(value => {
+        const rooms = Array.from(new Set(nameCount[value]));
+        if (value && rooms.length > 1) {
+          const dupCard = document.createElement('div');
+          dupCard.className = 'dup-card';
+          const roomsList = rooms.map(r => r.replace('room-', '')).join(' - ');
+          dupCard.textContent = `• تشابه في الاسم
+( ${value} )
+الغرف ( ${roomsList} )`;
+          dupContainer.appendChild(dupCard);
+        }
+      });
+    }
+
+    function exportData() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const gregorianDate = `${year}/${month}/${day}`;
+      const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const period = hours >= 12 ? 'م' : 'ص';
+      const formattedHour = hours % 12 || 12;
+      const formattedTime = `الساعة | ${formattedHour}:${minutes} ${period}`;
+
+      let html = `<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <style> body { font-family: 'Arial'; padding: 20px; direction: rtl; text-align: right; } 
+    /* تنسيقات لوحة المهام */
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .tasks-header button {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .tasks-container {
+      display: flex; flex-direction: row; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .task-card {
+      background-color: white; color: black; padding: 10px;
+      border-radius: 8px;
+      color: white;
+    }
+    .task-card input,
+    .task-card textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .task-card textarea {
+      height: 60px;
+      resize: none;
+    }
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .task-actions button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+    }
+    .task-actions .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+      background-color: #ccc;
+      vertical-align: middle;
+    }
+
+  
+    /* تنسيق كرت الصفحة الرئيسية يبقى */
+    /* تنسيق لوحة المهام */
+    .cards-container .tasks-header {
+      grid-column: 1 / -1 !important;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tasks-container {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+      gap: 15px !important;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .task-card {
+      background-color: #2c2c2c !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+    .task-buttons {
+      text-align: center !important;
+      margin-top: 10px !important;
+    }
+    /* إزالة أي تموضع ثابت سابق للزر */
+    .tasks-header {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
+
+
+    /* زر الحذف تحت خيارات الحالة */
+    .task-delete {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+</style>
+</head>
+<body>
+  <!-- شاشة تسجيل الدخول -->
+  <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
+    <h2>تسجيل الدخول</h2>
+    <input id="login-username" type="text" placeholder="Username" style="padding:8px; margin:8px 0; width:250px;"/>
+    <input id="login-password" type="password" placeholder="Password" style="padding:8px; margin:8px 0; width:250px;"/>
+    <button id="login-button" style="padding:8px 16px; margin:8px 0;">دخول</button>
+  </div>
+  <!-- محتوى التطبيق -->
+  <div id="app" style="display:none;">
+
+  <div>تقرير مبنى رابطة العالم الإسلامي</div>
+  <div>التاريخ | ${gregorianDate}</div>
+  <div>اليوم | ${dayName}</div>
+  <div>${formattedTime}</div><br/>`;
+
+      Object.keys(data).sort((a, b) => {
+        const numA = parseInt(a.split('-')[1]);
+        const numB = parseInt(b.split('-')[1]);
+        return numA - numB;
+      }).forEach(room => {
+        if (data[room].some(occ => occ.name)) {
+          const roomNum = room.replace('room-', '');
+          html += `<div>• غرفة | ${roomNum}</div>`;
+          data[room].forEach(occ => {
+            if (occ.name) {
+              html += `<div>الاسم: ${occ.name}</div>`;
+              html += `<div>الرقم: ${occ.phone}</div>`;
+              if (occ.rank) html += `<div>الرتبة: ${occ.rank}</div>`;
+              if (occ.grade) html += `<div>المرتبة: ${occ.grade}</div>`;
+              html += `<div>اللوحة: ${occ.plate}</div><br/>`;
+            }
+          });
+        }
+      });
+
+      html += `  </div>
+</body></html>`;
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.write(html);
+    }
+
+    function exportBuildingReport() {
+      const now = new Date();
+      const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+      const hijriDate = '1446/11/21هـ';
+
+      let html = `<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <style> body { font-family: 'Arial'; padding: 20px; direction: rtl; text-align: right; } 
+    /* تنسيقات لوحة المهام */
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .tasks-header button {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .tasks-container {
+      display: flex; flex-direction: row; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .task-card {
+      background-color: white; color: black; padding: 10px;
+      border-radius: 8px;
+      color: white;
+    }
+    .task-card input,
+    .task-card textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .task-card textarea {
+      height: 60px;
+      resize: none;
+    }
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .task-actions button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+    }
+    .task-actions .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+      background-color: #ccc;
+      vertical-align: middle;
+    }
+
+  
+    /* تنسيق كرت الصفحة الرئيسية يبقى */
+    /* تنسيق لوحة المهام */
+    .cards-container .tasks-header {
+      grid-column: 1 / -1 !important;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tasks-container {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+      gap: 15px !important;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .task-card {
+      background-color: #2c2c2c !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+    .task-buttons {
+      text-align: center !important;
+      margin-top: 10px !important;
+    }
+    /* إزالة أي تموضع ثابت سابق للزر */
+    .tasks-header {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
+
+
+    /* زر الحذف تحت خيارات الحالة */
+    .task-delete {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+</style>
+</head>
+<body>
+  <!-- شاشة تسجيل الدخول -->
+  <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
+    <h2>تسجيل الدخول</h2>
+    <input id="login-username" type="text" placeholder="Username" style="padding:8px; margin:8px 0; width:250px;"/>
+    <input id="login-password" type="password" placeholder="Password" style="padding:8px; margin:8px 0; width:250px;"/>
+    <button id="login-button" style="padding:8px 16px; margin:8px 0;">دخول</button>
+  </div>
+  <!-- محتوى التطبيق -->
+  <div id="app" style="display:none;">
+
+  <div>🛑 تقرير مبنى الرابطة 🛑</div>
+  <div>اليوم / ${dayName}</div>
+  <div>الموافق : ${hijriDate}</div><br/>`;
+
+      const totalOccupied = Object.values(data).flat().filter(o => o.name).length;
+      html += `<div>🔺 عدد الساكنين : (${totalOccupied})</div><hr/>`;
+
+      const officerRanks = ['ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'];
+      let officerCount = 0, enlistedCount = 0;
+      Object.values(data).flat().forEach(o => {
+        if (o.rank) {
+          if (officerRanks.includes(o.rank)) officerCount++;
+          else enlistedCount++;
+        }
+      });
+      html += `<div>- الضباط   عدد (${officerCount})</div>`;
+      html += `<div>- الأفراد   عدد (${enlistedCount})</div><br/>`;
+
+      html += `<div>الشرطة العسكرية ( 5 )</div>`;
+      html += `<div>التوثيق الأمني ( 4 )</div>`;
+      html += `<div>الإشراف الغذائي ( 4 )</div>`;
+      html += `<div>المصورين ( 12 )</div>`;
+      html += `<div>سائق الباص ( 9 )</div>`;
+      html += `<hr/>`;
+
+      html += `<div>🔺 الملاحظة 🔺</div>`;
+      html += `<div>* تواجد منسوبي الشرطة العسكرية</div>`;
+      html += `<div>* تواجد عدد (    ) عاملين متواجدين على مدار اليوم تم تنظيف المبنى كامل</div>`;
+      html += `<div>* تواجد عدد (    ) عامل من شركة القناص</div>`;
+      html += `  </div>
+</body></html>`;
+
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.write(html);
+    }
+
+    
+    // بيانات المهام
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('export-btn').style.display = 'none';
+      document.getElementById('report-link-btn').style.display = 'none';
+      document.getElementById('cards').innerHTML = '';
+      const cards = document.getElementById('cards');
+      // زر إضافة المهمة
+      const header = document.createElement('div');
+      header.className = 'tasks-header';
+      const addBtn = document.createElement('button');
+      addBtn.textContent = '+';
+      addBtn.onclick = addTask;
+      header.appendChild(addBtn);
+      cards.appendChild(header);
+      // حاوية المهام
+      const container = document.createElement('div');
+      container.className = 'tasks-container';
+      container.id = 'tasks-container';
+      cards.appendChild(container);
+      tasks.forEach((task, index) => renderTask(task, index));
+    }
+
+    
+    function addTask() {
+      const task = { type: '', details: '', status: 'pending' };
+      tasks.unshift(task);
+      saveTasks();
+      const container = document.getElementById('tasks-container');
+      container.innerHTML = '';
+      tasks.forEach((task, index) => renderTask(task, index));
+    }
+    
+
+    function renderTask(task, index) {
+      const container = document.getElementById('tasks-container');
+      const card = document.createElement('div');
+      card.className = 'task-card';
+      card.setAttribute('data-index', index);
+      card.innerHTML = `
+        <input type="text" class="task-type" placeholder="نوع المهمة" value="${task.type}" oninput="updateTaskField(${index}, 'type', this.value)">
+        <textarea class="task-details" placeholder="التفاصيل" oninput="updateTaskField(${index}, 'details', this.value)">${task.details}</textarea>
+        <div class="task-actions">
+          <button onclick="setTaskStatus(${index}, 'pending')">تحت المعالجة <span class="dot pending"></span></button>
+          <button onclick="setTaskStatus(${index}, 'done')">تمت المعالجة <span class="dot done"></span></button>
+        </div>
+        <div class="task-delete">
+          <button class="delete-btn" onclick="deleteTask(${index})">حذف</button>
+        </div>
+      `;
+      container.appendChild(card);
+      updateTaskStatusDisplay(card, task.status);
+    }
+
+    function updateTaskField(index, field, value) {
+      tasks[index][field] = value;
+      saveTasks();
+    }
+
+    function setTaskStatus(index, status) {
+      tasks[index].status = status;
+      saveTasks();
+      const card = document.querySelector(`.task-card[data-index="${index}"]`);
+      updateTaskStatusDisplay(card, status);
+    }
+
+    function updateTaskStatusDisplay(card, status) {
+      const pendingDot = card.querySelector('.dot.pending');
+      const doneDot = card.querySelector('.dot.done');
+      pendingDot.style.backgroundColor = status === 'pending' ? 'orange' : '#ccc';
+      doneDot.style.backgroundColor = status === 'done' ? 'green' : '#ccc';
+    }
+
+
+    
+    // حذف مهمة
+    
+    // إعادة رسم جميع المهام
+    function renderAllTasks() {
+      const container = document.getElementById('tasks-container');
+      container.innerHTML = '';
+      tasks.forEach((t, idx) => renderTask(t, idx));
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
       renderAllTasks();
     }
-
-    function renderAllTasks(){const cont=document.querySelector('.tasks-container');cont.innerHTML='';tasks.forEach((t,i)=>renderTask(t,i));}
-
-    function searchRooms(){const v=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.room-card').forEach(c=>c.style.display=c.querySelector('.room-title').textContent.includes(v)?'block':'none');}
-
-    function exportData(){/* as before or omitted */ alert('تصدير البيانات ليست مفعلة');}
-    function exportBuildingReport(){alert('تقرير المبنى غير مفعّل');}
+    
+    
   </script>
+  </div>
 </body>
 </html>
