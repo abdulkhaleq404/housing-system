@@ -1,4248 +1,1010 @@
 <!DOCTYPE html>
-<div class="background-logo"></div>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>مـبـنى رابـطـة الـعـالـم الإسـلامـي</title>
-<style>
+  <meta charset="UTF-8">
+  <title>مبنى رابطة العالم الإسلامي</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: white;
+      color: black;
+      margin: 0;
+      padding: 20px;
+      font-weight: bold;
+      overflow: auto;
+    }
 
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: white; /* تغيير اللون إلى الأبيض */
-  color: white; /* تغيير لون النص إلى الأسود ليتناسب مع الخلفية البيضاء */
-  margin: 0;
-  padding: 20px;
-  font-weight: bold;
-}
+    /* الشعار 1 كخلفية */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng2.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 600px auto;
+      opacity: 0.25;
+      z-index: -2;
+      pointer-events: none;
+    }
 
-/* نصوص العناوين أو الإحصائيات */
-.stats-title,
-.stats-number {
-  color: white;
-  z-index: 1;
-position: relative;
-}
-h2 {
-  text-align: center;
-  font-size: 35px !important;  /* زيادة الحجم */
-  font-weight: bold !important; /* جعل النص بولد */
-  color: black !important;     /* لون أسود */
-}
-/* نصوص الغرف داخل الكروت */
-.card .room-number,
-.card .guest-info {
-  color: white;
-  z-index: 1;
-position: relative;
-}
-h2,
-.floor-btn,
-#main-btn,
-.stat-box,
-.room-title,
-.toggle-btn,
-.occupant input,
-.occupant select,
-#search,
-#export-btn {
-font-weight: bold;
-}
-h2 {
-text-align: center;
-font-size: 28px;
-}
-.floor-selection {
-display: flex;
-justify-content: center;
-flex-wrap: wrap;
-gap: 10px;
-margin: 20px 0 15px;
-font-size: 18px;
-z-index: 1;
-position: relative;
-}
+    /* الشعار 2 خلف الكروت */
+    #logo2 {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: -1;
+      opacity: 1;
+    }
 
-.floor-btn {
-  padding: 10px 18px;
-  background-color: #2f2f2f; /* لون داكن أوضح */
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-  z-index: 1;
-position: relative;
-}
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: black;
+      margin-bottom: 10px;
+    }
 
-.floor-btn:hover {
-  background-color: #3a3a3a;
-  z-index: 1;
-position: relative;
-}
+    #main-btn {
+      display: block;
+      margin: 0 auto 10px auto;
+      font-size: 19px;
+      padding: 12px 20px;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    #main-btn:hover {
+      background-color: #133b5c;
+    }
 
-#main-btn {
-  font-size: 19px;
-  padding: 12px 20px;
-  background-color: #0b2545;
-  color: white;
-  opacity:1; /* ت أكيد إلغاء أي شفافية */
-z-index: 1;
-position: relative;
+    .floor-selection {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .floor-btn {
+      padding: 10px 18px;
+      background-color: #2f2f2f;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .floor-btn:hover {
+      background-color: #3a3a3a;
+    }
+
+    .secondary-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    #all-btn, #duplicates-btn {
+      padding: 10px 18px;
+      background-color: #2f2f2f;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    #all-btn:hover, #duplicates-btn:hover {
+      background-color: #3a3a3a;
+    }
+
+    #search {
+      display: none; /* إخفاؤه بشكل افتراضي */
+      margin: 10px auto;
+      padding: 6px 10px;
+      width: 200px;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    #export-btn, #report-link-btn {
+      display: none;
+      margin: 10px auto;
+      padding: 6px 12px;
+      font-size: 14px;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    #export-btn:hover, #report-link-btn:hover {
+      background-color: #133b5c;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+
+    .stat-box {
+      background-color: #2c2c2c;
+      border-radius: 8px;
+      padding: 15px;
+      width: 160px;
+      text-align: center;
+      font-size: 16px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      margin: 10px 0 0;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .room-card {
+      background-color: #2c2c2c;
+      border-radius: 8px;
+      width: calc(25% - 10px);
+      padding: 10px;
+      box-sizing: border-box;
+      transition: 0.3s ease;
+      position: relative;
+      color: white;
+    }
+    .room-card .room-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-align: center;
+      color: white;
+    }
+    .room-card .toggle-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .room-card .occupants {
+      display: none;
+      margin-top: 10px;
+    }
+    .room-card .occupant {
+      margin-bottom: 10px;
+      background-color: #333;
+      padding: 5px;
+      border-radius: 4px;
+      color: white;
+    }
+    .room-card .occupant input,
+    .room-card .occupant select {
+      width: 100%;
+      padding: 5px;
+      background-color: #2f2f2f;
+      border: 1px solid #555;
+      color: white;
+      text-align: center;
+      box-sizing: border-box;
+      margin-bottom: 5px;
+    }
+    .room-card .status-dots {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      margin-bottom: 5px;
+    }
+    .room-card .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: green;
+    }
+    .room-card .dot.filled {
+      background-color: red;
+    }
+    .room-card .occupied-count {
+      text-align: center;
+      margin-bottom: 5px;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* تنسيق صف المتكررات: 3 كروت في الصف */
+    .duplicates-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .dup-card {
+      background-color: #444;
+      padding: 10px;
+      border-radius: 8px;
+      color: white;
+      white-space: pre-wrap; /* للحفاظ على التنسيق */
+      text-align: right;
+    }
+
+    @media (max-width: 768px) {
+      .room-card {
+        width: 100%;
+      }
+      .stats-container {
+        grid-template-columns: repeat(1, 1fr);
+      }
+      .duplicates-container {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
   
-}
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng2.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 600px auto;
-  opacity: 0.25; /* شفافية 0.25 */
-  z-index: -1;
-  pointer-events: none;
-}
-#main-btn:hover {
-  background-color: #133b5c;  opacity: 1; /* تأكيد إلغاء أي شفافية */
-z-index: 1;
-position: relative;
-}
+    /* تنسيقات لوحة المهام */
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .tasks-header button {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .tasks-container {
+      display: flex; flex-direction: row; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .task-card {
+      background-color: white; color: black; padding: 10px;
+      border-radius: 8px;
+      color: white;
+    }
+    .task-card input,
+    .task-card textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .task-card textarea {
+      height: 60px;
+      resize: none;
+    }
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .task-actions button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+    }
+    .task-actions .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+      background-color: #ccc;
+      vertical-align: middle;
+    }
 
-#search {
-  display: none;
-  margin: 0 auto 10px;
-  padding: 6px 10px;
-  width: 200px;
-  text-align: center;
-  border-radius: 5px;
-  border: 1px solid #444;
-  background-color: #1e1e1e;
-  color: white;
-  z-index: 1;
-position: relative;
-}
-
-#export-btn {
-  display: none;
-  margin: 0 auto 20px;
-  padding: 6px 12px;
-  font-size: 14px;
-  background-color: #0b2545;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  opacity: 1; /* تأكيد إلغاء أي شفافية */
-z-index: 1;
-position: relative;
-}
-<style>
-  body {
-    overflow: hidden;
-  }
-
-#export-btn:hover {
-  background-color: #133b5c;
-  opacity: 1; /* تأكيد إلغاء أي شفافية */
-z-index: 1;
-position: relative;
-}
-
-.stats-container {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 15px;
-justify-items: center;
-margin-top: 40px;
-z-index: 1;
-position: relative;
-}
-
-.stat-box {
-  background-color: #2c2c2c; /* الحفاظ على اللون */
-  border-radius: 8px;
-  padding: 15px;
-  width: 160px;
-  text-align: center;
-  font-size: 16px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* الحفاظ على الظل */
-z-index: 1;
-position: relative;
-}
-
-.stat-number {
-font-size: 28px;
-margin: 10px 0 0;
-z-index: 1;
-position: relative;
-}
-.cards-container {
-display: flex;
-flex-wrap: wrap;
-gap: 10px;
-justify-content: center;
-z-index: 1;
-position: relative;
-}
-
-.room-card {
-  background-color: #2c2c2c; /* الحفاظ على اللون */
-  border-radius: 8px;
-  width: calc(25% - 10px);
-  padding: 10px;
-  box-sizing: border-box;
-  transition: 0.3s ease;
-  position: relative;
-  z-index: 1;
-position: relative;
-}
-
-.room-card.open .occupants {
-display: block;
-z-index: 1;
-position: relative;
-}
-.room-title {
-font-weight: bold;
-margin-bottom: 5px;
-text-align: center;
-z-index: 1;
-position: relative;
-}
-.toggle-btn {
-position: absolute;
-top: 10px;
-left: 10px;
-background: none;
-color: white;
-border: none;
-font-size: 20px;
-cursor: pointer;
-z-index: 1;
-position: relative;
-}
-.occupants {
-display: none;
-margin-top: 10px;
-z-index: 1;
-position: relative;
-}
-
-.occupant {
-  margin-bottom: 10px;
-  background-color: #333; /* تم تعديل اللون ليكون أغمق بقليل */
-  padding: 5px;
-  border-radius: 4px;
-  z-index: 1;
-position: relative;
-}
-
-.occupant input,
-.occupant select {
-  width: 100%;
-  padding: 5px;
-  background-color: #2f2f2f; /* لون غير شفاف قريب جدًا من السابق */
-  border: 1px solid #555;
-  color: white;
-  text-align: center;
-  box-sizing: border-box;
-  margin-bottom: 5px;
-  z-index: 1;
-position: relative;
-}
-
-.status-dots {
-display: flex;
-gap: 4px;
-justify-content: center;
-margin-bottom: 5px;
-z-index: 1;
-position: relative;
-}
-.dot {
-width: 10px;
-height: 10px;
-border-radius: 50%;
-background-color: green;
-z-index: 1;
-position: relative;
-}
-.dot.filled {
-background-color: red;
-z-index: 1;
-position: relative;
-}
-@media (max-width: 768px) {
-.room-card {
-width: 100%;
-}
-.stats-container {
-grid-template-columns: repeat(1, 1fr);
-}
-}
-<style>
-  body {
-    overflow: hidden;
-  }
+  
+    /* تنسيق كرت الصفحة الرئيسية يبقى */
+    /* تنسيق لوحة المهام */
+    .cards-container .tasks-header {
+      grid-column: 1 / -1 !important;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tasks-container {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+      gap: 15px !important;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .task-card {
+      background-color: #2c2c2c !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+    .task-buttons {
+      text-align: center !important;
+      margin-top: 10px !important;
+    }
+    /* إزالة أي تموضع ثابت سابق للزر */
+    .tasks-header {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
 
 </style>
 </head>
 <body>
-<div style="position: fixed; top: 10px; left: 10px; z-index: 999;">
-  <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار" style="max-width: 250px; height: auto; margin: 0;">
-</div>
+  <div id="logo2">
+    <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار ثانوي" style="max-width: 250px; height: auto;">
+  </div>
 
-<h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
+  <h2>مبنى رابطة العالم الإسلامي</h2>
+  <button id="main-btn" onclick="loadMain()">الصفحة الرئيسية</button>
 
-<div class="floor-selection">
-<button id="main-btn" class="floor-btn" onclick="loadMain()">الـصـفـحـة الـرئـيـسـية</button>
-</div>
+  <div class="floor-selection">
+    <button class="floor-btn" onclick="loadFloor(1)">الطابق الأول</button>
+    <button class="floor-btn" onclick="loadFloor(2)">الطابق الثاني</button>
+    <button class="floor-btn" onclick="loadFloor(3)">الطابق الثالث</button>
+    <button class="floor-btn" onclick="loadFloor(4)">الطابق الرابع</button>
+  </div>
 
-<div class="floor-selection">
-<button class="floor-btn" onclick="loadFloor(1)">الــطـــابــق الأول</button>
-<button class="floor-btn" onclick="loadFloor(2)">الـطـابـق الـثــانـي</button>
-<button class="floor-btn" onclick="loadFloor(3)">الـطـابـق الـثـالـث</button>
-<button class="floor-btn" onclick="loadFloor(4)">الـطــابــق الـرابـع</button>
-<button class="floor-btn" onclick="loadFloor(0)">الـجـمـيـع</button>
-</div>
+  <div class="secondary-buttons">
+    <button id="all-btn" onclick="loadFloor(0)">الجميع</button>
+    <button id="duplicates-btn" onclick="loadDuplicates()">المتكررات</button>
+    <button id="tasks-btn" onclick="loadTasks()">المهام</button>
+  </div>
 
+  <input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
+  <button id="export-btn" onclick="exportData()">تقرير بيانات الغرف</button>
+  <button id="report-link-btn" onclick="exportBuildingReport()">تقرير مبنى الرابطة</button>
 
+  <div id="cards" class="cards-container"></div>
 
-<input type="text" id="search" placeholder="البحث" oninput="searchRooms()">
-<button id="export-btn" onclick="exportData()">إصـدار تـقـريـر</button>
+  <script>
+    // بيانات وهمية مبدئية
+    let data = JSON.parse(localStorage.getItem('housingData') || `{
+      "room-101": [
+        {"name":"سعود محمد التميمي","phone":"0539332262","rank":"رائد","plate":"د د ا - 4699","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ],
+      "room-102": [
+        {"name":"عامر صقر الشمري","phone":"055146446","rank":"ملازم أول","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ],
+      "room-103": [
+        {"name":"عبدالرحمن حمد الدوسري","phone":"0564082502","rank":"مقدم","plate":"ح ن ن 8469","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ],
+      "room-104": [
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ]
+      /* أكمل بقية الغرف حسب الحاجة */
+    }`);
 
-<div id="cards" class="cards-container"></div>
+    function saveToStorage() {
+      localStorage.setItem('housingData', JSON.stringify(data));
+    }
 
-<script>
-let currentFloor = 1;
-const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
-const occupantsPerRoom = { 1: 3, 2: 3, 3: 16, 4: 16 };
-const ranks = {
-1: ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'],
-2: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب', 'رقيب أول', 'رئيس رقباء'],
-3: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب'],
-4: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب']
-};
-let data = JSON.parse(localStorage.getItem('housingData') || `{
-  "room-101": [
-    {
-      "name": "سعود محمد التميمي",
-      "phone": "0539332262",
-      "rank": "رائد",
-      "plate": "د د ا - 4699"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-102": [
-    {
-      "name": "عامر صقر الشمري",
-      "phone": "055146446",
-      "rank": "ملازم أول",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-103": [
-    {
-      "name": "عبدالرحمن حمد الدوسري",
-      "phone": "0564082502",
-      "rank": "مقدم",
-      "plate": "ح ن ن 8469"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-104": [
-    {
-      "name": "عبدالله عطيه الزهراني",
-      "phone": "0555222134",
-      "rank": "مقدم",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-105": [
-    {
-      "name": "عبدالله علي الزهراني",
-      "phone": "0550293636",
-      "rank": "نقيب",
-      "plate": ""
-    },
-    {
-      "name": "فهد علي القرني",
-      "phone": "",
-      "rank": "ملازم أول",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-106": [
-    {
-      "name": "فهد عبدالله الشمراني",
-      "phone": "0557562045",
-      "rank": "نقيب",
-      "plate": "ح ه س 4474"
-    },
-    {
-      "name": "تركي محمد العجمي",
-      "phone": "0564010649",
-      "rank": "نقيب",
-      "plate": "د ن ن 1520"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-107": [
-    {
-      "name": "عيد عقاب السهلي",
-      "phone": "0543975000",
-      "rank": "نقيب",
-      "plate": "ح ر ح 8148"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-108": [
-    {
-      "name": "عبدالرحمن زين  خواجي",
-      "phone": "0507557031",
-      "rank": "نقيب",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-109": [
-    {
-      "name": "حابش سحمان العلياني",
-      "phone": "0553477520",
-      "rank": "ملازم أول",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "عبدالله حسين حسن القحطاني",
-      "phone": "0542338808",
-      "rank": "ملازم أول",
-      "plate": "ر ك س 7171"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-110": [
-    {
-      "name": "عادل مصبح حمياني",
-      "phone": "054031887",
-      "rank": "رائد",
-      "plate": "ح ل ق 9383"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-111": [
-    {
-      "name": "حسن سلمان القيسي",
-      "phone": "0539353135",
-      "rank": "نقيب",
-      "plate": "ح و ق 8722"
-    },
-    {
-      "name": "زاهر محمد الزبيدي",
-      "phone": "0539363136",
-      "rank": "نقيب",
-      "plate": "ح و ا 4492"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-112": [
-    {
-      "name": "عبدالاله صالح العواد",
-      "phone": "0555776969",
-      "rank": "نقيب",
-      "plate": "ب ك ن 9040"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-113": [
-    {
-      "name": "عبدالمجيد عبدالله الزهراني",
-      "phone": "0541017233",
-      "rank": "نقيب",
-      "plate": "ر ح ق 9604"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-114": [
-    {
-      "name": "محمد عبدالرحمن النقيدان",
-      "phone": "0539336676",
-      "rank": "رائد",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-115": [
-    {
-      "name": "عامر يحيى الجديبا",
-      "phone": "0536644211",
-      "rank": "نقيب",
-      "plate": "ر د ب 6391"
-    },
-    {
-      "name": "محمد علي المرحبي",
-      "phone": "0503736382",
-      "rank": "نقيب",
-      "plate": "ر د س -  1548"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-116": [
-    {
-      "name": "عمر سعد البقمي",
-      "phone": "0553005414",
-      "rank": "رائد",
-      "plate": "ر ك ح 3939"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-117": [
-    {
-      "name": "محمد حمود القحطاني",
-      "phone": "0544323797",
-      "rank": "نقيب",
-      "plate": "ح م ب 9865"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-119": [
-    {
-      "name": "علي غازي العشي",
-      "phone": "0505676418",
-      "rank": "مقدم",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-120": [
-    {
-      "name": "ابراهيم محمد محيذيف",
-      "phone": "0592229950",
-      "rank": "نقيب",
-      "plate": ""
-    },
-    {
-      "name": "مالك عبدالله العتيبي",
-      "phone": "0582467677",
-      "rank": "ملازم أول",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-122": [
-    {
-      "name": "عبدالله سعد علي ال بخات",
-      "phone": "0539357923",
-      "rank": "نقيب",
-      "plate": "ح م و  -  1625"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-123": [
-    {
-      "name": "عبد العزيز عثمان القرني",
-      "phone": "0541333993",
-      "rank": "رائد",
-      "plate": "م ع م  -  2810"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-124": [
-    {
-      "name": "سلطان عوض المطيري",
-      "phone": "0547329140",
-      "rank": "نقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "سعد خلف المطيري",
-      "phone": "0554949595",
-      "rank": "ملازم أول",
-      "plate": "ر ص د - فورد توريس"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-125": [
-    {
-      "name": "بدر عبدالمحسن السويدان",
-      "phone": "0551116914",
-      "rank": "نقيب",
-      "plate": "ح ه ع 6863"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-126": [
-    {
-      "name": "مصطفى محمد حجازي",
-      "phone": "0562200445",
-      "rank": "رائد",
-      "plate": "د ى أ  -  4556"
-    },
-    {
-      "name": "محمد عبد الرزاق الشريف",
-      "phone": "0500333850",
-      "rank": "رائد",
-      "plate": "ر ى و 111"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-127": [
-    {
-      "name": "محمد خليل الخيبري",
-      "phone": "0555382037",
-      "rank": "رائد",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-128": [
-    {
-      "name": "سعد سعود السقياني",
-      "phone": "0568170174",
-      "rank": "نقيب",
-      "plate": "ب ع ل -  2657"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-129": [
-    {
-      "name": "حابش سحمان العلياني",
-      "phone": "0553477520",
-      "rank": "ملازم أول",
-      "plate": ""
-    },
-    {
-      "name": "يحيى محمد علي طالبي",
-      "phone": "0558631415",
-      "rank": "ملازم أول",
-      "plate": "2796  ر ب ص"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-130": [
-    {
-      "name": "عبد الله فرج القحطاني",
-      "phone": "0539151001",
-      "rank": "نقيب",
-      "plate": ""
-    },
-    {
-      "name": "معجب علي الحنيفي",
-      "phone": "0555432515",
-      "rank": "ملازم أول",
-      "plate": "د ه ر 1815"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-131": [
-    {
-      "name": "علي طالع محمد الصعاوده الربعي",
-      "phone": "",
-      "rank": "نقيب",
-      "plate": ""
-    },
-    {
-      "name": "عائض مريع ال مريع",
-      "phone": "0559598432",
-      "rank": "نقيب",
-      "plate": "د ن د -  8922"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-132": [
-    {
-      "name": "عبدالعزيز محمد ال زايد",
-      "phone": "0533995517",
-      "rank": "نقيب",
-      "plate": "د ى د 6254"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-133": [
-    {
-      "name": "عبد العزيز جردي جعفري",
-      "phone": "0509109835",
-      "rank": "ملازم أول",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "محمد عبد الله الهويمل",
-      "phone": "0590770559",
-      "rank": "ملازم أول",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-134": [
-    {
-      "name": "مسحل خلف المطيري",
-      "phone": "0564077458",
-      "rank": "مقدم",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-135": [
-    {
-      "name": "حسن ناصر القحطاني",
-      "phone": "0539122662",
-      "rank": "رائد",
-      "plate": "ر س ط -  7503"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-136": [
-    {
-      "name": "زياد صالح الشمراني",
-      "phone": "0591355534",
-      "rank": "ملازم",
-      "plate": "ر هـ و -  2580"
-    },
-    {
-      "name": "عادل مخضور الذروي",
-      "phone": "0566778721",
-      "rank": "ملازم",
-      "plate": "د هـ و -  2829"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-201": [
-    {
-      "name": "يحيى حسن محمد عوس",
-      "phone": "0555927011",
-      "rank": "رئيس رقباء",
-      "plate": "د ا ق  -  3938"
-    },
-    {
-      "name": "احمد صالح حسن العمري",
-      "phone": "0551323933",
-      "rank": "رقيب أول",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-202": [
-    {
-      "name": "نايف ابراهيم داموك الزهراني",
-      "phone": "0567807720",
-      "rank": "رقيب أول",
-      "plate": "د م ط  -  3756"
-    },
-    {
-      "name": "سلطان ابراهيم داموك الزهراني",
-      "phone": "0550555653",
-      "rank": "رقيب أول",
-      "plate": "ب ك ن  -  9551"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-203": [
-    {
-      "name": "حسين علي سعيد القحطاني",
-      "phone": "0555838855",
-      "rank": "رقيب",
-      "plate": "ح د ل  -  7494"
-    },
-    {
-      "name": "سلمان عبدالعزيز محمد الزهراني",
-      "phone": "0557302330",
-      "rank": "رقيب أول",
-      "plate": "ح ط ا  -  4824"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-204": [
-    {
-      "name": "ممدوح مقبل الحربي",
-      "phone": "0599977206",
-      "rank": "رقيب أول",
-      "plate": "د ق ب 9353"
-    },
-    {
-      "name": "عبدالرحمن خفير عبدالله آل مدهش الخثعمي",
-      "phone": "0555839466",
-      "rank": "رقيب",
-      "plate": "د ل ل - 2271"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-205": [
-    {
-      "name": "عبد الرحمن حسن جبران",
-      "phone": "0540314309",
-      "rank": "رقيب أول",
-      "plate": "5571 ب ب ر"
-    },
-    {
-      "name": "سعد عوضه الاحمري",
-      "phone": "0590223737",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-206": [
-    {
-      "name": "طارق عيد الزهراني",
-      "phone": "0557726969",
-      "rank": "رقيب أول",
-      "plate": "9889  ا ن ب"
-    },
-    {
-      "name": "ابراهيم محمد علي الزهراني",
-      "phone": "0555786099",
-      "rank": "رئيس رقباء",
-      "plate": "7430 ح م م"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-207": [
-    {
-      "name": "مشعل عايد محسن الحربي",
-      "phone": "0505902424",
-      "rank": "رئيس رقباء",
-      "plate": "ح م ى 688"
-    },
-    {
-      "name": "منيف مانع المطيري",
-      "phone": "0555944544",
-      "rank": "رقيب أول",
-      "plate": "2330"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-208": [
-    {
-      "name": "سعيد يحيى مسعود القحطاني",
-      "phone": "0598070509",
-      "rank": "رئيس رقباء",
-      "plate": "د ب ر 7519"
-    },
-    {
-      "name": "ذيب فهد القحطاني",
-      "phone": "0554441832",
-      "rank": "وكيل رقيب",
-      "plate": "ح و و 4091"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-209": [
-    {
-      "name": "زاهر عبدالرحمن الشهري",
-      "phone": "0554551700",
-      "rank": "رئيس رقباء",
-      "plate": "ح ص و 6347"
-    },
-    {
-      "name": "احمد موسى الزهراني",
-      "phone": "0509629180",
-      "rank": "رئيس رقباء",
-      "plate": "ا ب س -  6641"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-210": [
-    {
-      "name": "عبدالله سالم القحطاني",
-      "phone": "0532169992",
-      "rank": "رئيس رقباء",
-      "plate": ""
-    },
-    {
-      "name": "فهد سعد الشهراني",
-      "phone": "0558080050",
-      "rank": "رقيب أول",
-      "plate": "د ح ك 7520"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-211": [
-    {
-      "name": "عبدالله سعد الحارثي",
-      "phone": "0531695551",
-      "rank": "رئيس رقباء",
-      "plate": "أ ل د -  6003"
-    },
-    {
-      "name": "نايف محيميد الحلافي",
-      "phone": "0543758371",
-      "rank": "رقيب أول",
-      "plate": "ب س د -  4733"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-212": [
-    {
-      "name": "صالح عبدالله ال قعود",
-      "phone": "0531253944",
-      "rank": "رئيس رقباء",
-      "plate": "7909"
-    },
-    {
-      "name": "عبدالرحمن فرحان الشمري",
-      "phone": "0554972832",
-      "rank": "رئيس رقباء",
-      "plate": "ب أ ب -  9512"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-213": [
-    {
-      "name": "محمد صالح الزهراني",
-      "phone": "0505776296",
-      "rank": "رئيس رقباء",
-      "plate": "ر ر ص 2937"
-    },
-    {
-      "name": "مستور موسى الغامدي",
-      "phone": "0530413415",
-      "rank": "رقيب أول",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-214": [
-    {
-      "name": "علي محمد عسيري",
-      "phone": "0535751406",
-      "rank": "رئيس رقباء",
-      "plate": "8671"
-    },
-    {
-      "name": "احمد مطلق الحصيني",
-      "phone": "0554548965",
-      "rank": "رقيب أول",
-      "plate": "ر ن س 1643"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-215": [
-    {
-      "name": "عبدالعزيز علي القرني",
-      "phone": "0556662036",
-      "rank": "رقيب أول",
-      "plate": "د ح ل 6088"
-    },
-    {
-      "name": "سعد مسفر القرني",
-      "phone": "0562692488",
-      "rank": "رئيس رقباء",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-216": [
-    {
-      "name": "ناصر محمد الشهراني",
-      "phone": "0536199866",
-      "rank": "رئيس رقباء",
-      "plate": ""
-    },
-    {
-      "name": "جابر يحيى المالكي",
-      "phone": "0554009930",
-      "rank": "رقيب أول",
-      "plate": "7168"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-217": [
-    {
-      "name": "عبدالرحمن حسين القحطاني",
-      "phone": "0558955540",
-      "rank": "رئيس رقباء",
-      "plate": "ر ح و 6059"
-    },
-    {
-      "name": "نايف مسند الحربي",
-      "phone": "0505887980",
-      "rank": "رئيس رقباء",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-218": [
-    {
-      "name": "خالد محمد علي",
-      "phone": "0504791810",
-      "rank": "رئيس رقباء",
-      "plate": "1191"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-219": [
-    {
-      "name": "سليمان دهيش الرشيدي",
-      "phone": "0540023400",
-      "rank": "رئيس رقباء",
-      "plate": "ر ق س 1215"
-    },
-    {
-      "name": "مفلح عبدالله ال شطفان",
-      "phone": "0536890023",
-      "rank": "رئيس رقباء",
-      "plate": "م م س 5577"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-220": [
-    {
-      "name": "ظافر سعيد القحطاني - دخان / معسل",
-      "phone": "0556822204",
-      "rank": "رئيس رقباء",
-      "plate": "ا س ا -  8686"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-221": [
-    {
-      "name": "بريك عبدالرحمن الشمراني",
-      "phone": "0501552299",
-      "rank": "رئيس رقباء",
-      "plate": "ا ر ن 5156"
-    },
-    {
-      "name": "محمد مسفر الوادعي",
-      "phone": "0554443485",
-      "rank": "رقيب",
-      "plate": "ر ب ب 6742"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-222": [
-    {
-      "name": "إبراهيم القحطاني",
-      "phone": "0506598818",
-      "rank": "رئيس رقباء",
-      "plate": ""
-    },
-    {
-      "name": "علي محمد جابر",
-      "phone": "0551991767",
-      "rank": "رقيب أول",
-      "plate": "ا ب ل 5234"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-223": [
-    {
-      "name": "راشد احمد  الزهراني",
-      "phone": "0555537573",
-      "rank": "رئيس رقباء",
-      "plate": "د ب د 4442"
-    },
-    {
-      "name": "احمد عبدالله الزهراني",
-      "phone": "0507042909",
-      "rank": "رقيب أول",
-      "plate": "ا د د 2268"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-224": [
-    {
-      "name": "سعد سفر الغامدي",
-      "phone": "0531234200",
-      "rank": "رقيب أول",
-      "plate": "4007 ب ط س"
-    },
-    {
-      "name": "دخيل الله المالكي",
-      "phone": "0506785127",
-      "rank": "رئيس رقباء",
-      "plate": "ا ح د 2553"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-225": [
-    {
-      "name": "عبدالله محمد الشهري",
-      "phone": "0557661142",
-      "rank": "رئيس رقباء",
-      "plate": ""
-    },
-    {
-      "name": "سعيد سعود الاسمري",
-      "phone": "0556744909",
-      "rank": "رقيب أول",
-      "plate": "ر س ك 3835"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-226": [
-    {
-      "name": "بحير عبدالحاوي بحير",
-      "phone": "0548355666",
-      "rank": "رقيب",
-      "plate": "ب ك د 1175"
-    },
-    {
-      "name": "ظافر محمد العواشز",
-      "phone": "0554898838",
-      "rank": "رئيس رقباء",
-      "plate": "ب د ر 5739"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-227": [
-    {
-      "name": "عبدالله علي الاحمري",
-      "phone": "0531499779",
-      "rank": "وكيل رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "محمد نايف المطيري",
-      "phone": "0582888838",
-      "rank": "رقيب",
-      "plate": "ن ط ع  -  600"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-228": [
-    {
-      "name": "مشبب محمد مشبب",
-      "phone": "0557778871",
-      "rank": "رئيس رقباء",
-      "plate": "ا ب ص 2219"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-229": [
-    {
-      "name": "فايز لطيف الفايدي",
-      "phone": "0557000709",
-      "rank": "رقيب أول",
-      "plate": "أ أ ن - 4852"
-    },
-    {
-      "name": "احمد مسفر حسن",
-      "phone": "0568821820",
-      "rank": "رئيس رقباء",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-230": [
-    {
-      "name": "محمد مشبب الشهراني",
-      "phone": "0544495096",
-      "rank": "رئيس رقباء",
-      "plate": "ب ن ط 1720"
-    },
-    {
-      "name": "ظافر فيصل السبيعي",
-      "phone": "0559888358",
-      "rank": "رقيب",
-      "plate": "د ل و -  5116"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-231": [
-    {
-      "name": "احمد مسيب البلوي",
-      "phone": "0554554929",
-      "rank": "رئيس رقباء",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-232": [
-    {
-      "name": "محمد حسن الزهراني",
-      "phone": "0500790791",
-      "rank": "رقيب",
-      "plate": "ى ا س 4 5 6"
-    },
-    {
-      "name": "عبدالله سفر الشراوي",
-      "phone": "0543293321",
-      "rank": "رقيب أول",
-      "plate": "ح ل ص 2 0 9 0"
-    },
-    {
-      "name": "عبدالرحمن الزهراني",
-      "phone": "0507656660",
-      "rank": "رقيب",
-      "plate": ""
-    }
-  ],
-  "room-233": [
-    {
-      "name": "عبدالعزيز محمد الزهراني",
-      "phone": "0500225117",
-      "rank": "رقيب أول",
-      "plate": ""
-    },
-    {
-      "name": "فهد محمد الزهراني",
-      "phone": "0501876564",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-236": [
-    {
-      "name": "هندسيه",
-      "phone": "",
-      "rank": "جندي",
-      "plate": ""
-    },
-    {
-      "name": "هندسيه",
-      "phone": "",
-      "rank": "جندي",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-301": [
-    {
-      "name": "خالد منور الثبيتي",
-      "phone": "0555531406",
-      "rank": "رقيب",
-      "plate": "ح ن ب 3922"
-    },
-    {
-      "name": "سعود زيد السبيعي",
-      "phone": "0505233577",
-      "rank": "رقيب",
-      "plate": "ا ك ر 9959"
-    },
-    {
-      "name": "مشاري عياش العنزي",
-      "phone": "0559442422",
-      "rank": "رقيب",
-      "plate": "ح ق ن 1999"
-    },
-    {
-      "name": "عبدالله علي العتيبي",
-      "phone": "0593444440",
-      "rank": "وكيل رقيب",
-      "plate": "ح د ل 7427"
-    },
-    {
-      "name": "ابراهيم محمد بن سالم",
-      "phone": "0582450987",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "هياف عبدالله السبيعي",
-      "phone": "0558812520",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "عبدالله سعد القحطاني",
-      "phone": "0502999440",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "عمر سعيد العلياني",
-      "phone": "0500092216",
-      "rank": "وكيل رقيب",
-      "plate": "ر س ك 6102"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-302": [
-    {
-      "name": "مشعل معاون الرويلي",
-      "phone": "0503586000",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "محمد خليف الرشيدي",
-      "phone": "0550829513",
-      "rank": "عريف",
-      "plate": "د ل ك 9215"
-    },
-    {
-      "name": "سالم مشرع المطيري",
-      "phone": "0551767879",
-      "rank": "وكيل رقيب",
-      "plate": "ح م ك 7473"
-    },
-    {
-      "name": "عثمان علي الزبيدي",
-      "phone": "0530665987",
-      "rank": "وكيل رقيب",
-      "plate": "ب ه ب 3635"
-    },
-    {
-      "name": "ثاري رويد الرشيدي",
-      "phone": "0506001080",
-      "rank": "عريف",
-      "plate": "د ل ك 9215"
-    },
-    {
-      "name": "احمد خليف الرشيدي",
-      "phone": "0531941651",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "عادل فراج الحارثي",
-      "phone": "0507227055",
-      "rank": "رقيب",
-      "plate": "ا ع ي 5955"
-    },
-    {
-      "name": "مسفر مثيب الاكلبي",
-      "phone": "0503595502",
-      "rank": "عريف",
-      "plate": "ب ر س 8544"
-    },
-    {
-      "name": "عبدالرحمن جبران ال خازم",
-      "phone": "0504733959",
-      "rank": "وكيل رقيب",
-      "plate": "أ أ ط -  7476"
-    },
-    {
-      "name": "نوحي هادي نوحي جعفري",
-      "phone": "0582955132",
-      "rank": "رقيب",
-      "plate": "ح ع م -  1906"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-303": [
-    {
-      "name": "نواف عبدالله غايب",
-      "phone": "0597216437",
-      "rank": "عريف",
-      "plate": "ر ب ل 8758"
-    },
-    {
-      "name": "مهند عبدالله العلي",
-      "phone": "0545652913",
-      "rank": "رقيب",
-      "plate": "ر ا ب 8287"
-    },
-    {
-      "name": "محمد خالد العجمي",
-      "phone": "0536666816",
-      "rank": "رقيب",
-      "plate": "د ه ح 4551"
-    },
-    {
-      "name": "طلال خلف الاسعدي",
-      "phone": "0599525328",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "ماجد ناصر محمد",
-      "phone": "0568883166",
-      "rank": "رقيب",
-      "plate": "ي ل ك 489"
-    },
-    {
-      "name": "محمد سالم الشهراني",
-      "phone": "0505761100",
-      "rank": "رقيب",
-      "plate": "د و ق 7090"
-    },
-    {
-      "name": "سلطان علي المالكي",
-      "phone": "0567762227",
-      "rank": "رقيب",
-      "plate": "ص ب د 6772"
-    },
-    {
-      "name": "حامد احمد الجهني",
-      "phone": "",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "بندر عبدالله الشهراني",
-      "phone": "",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-304": [
-    {
-      "name": "سلطان محمد هزازي",
-      "phone": "0551110611",
-      "rank": "جندي أول",
-      "plate": "د هـ ل -  4321"
-    },
-    {
-      "name": "سلطان سعيد الحارثي",
-      "phone": "0531399982",
-      "rank": "عريف",
-      "plate": "د هـ ح -  4749"
-    },
-    {
-      "name": "فهيد السبيعي",
-      "phone": "0500948333",
-      "rank": "عريف",
-      "plate": "أ ي هـ - 7846"
-    },
-    {
-      "name": "بندر بلغيث العقيلي",
-      "phone": "0533558327",
-      "rank": "عريف",
-      "plate": "ر هـ ع -  6752"
-    },
-    {
-      "name": "عطيه يحيى عسيري",
-      "phone": "0542277274",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "خليفه عايد الدهمشي",
-      "phone": "0540563344",
-      "rank": "جندي أول",
-      "plate": "د ك س -  1850"
-    },
-    {
-      "name": "علي عائض الجاهل",
-      "phone": "0542888780",
-      "rank": "رقيب",
-      "plate": "ح ر ط  -  3169"
-    },
-    {
-      "name": "مقرن سعيد",
-      "phone": "0533558687",
-      "rank": "رقيب",
-      "plate": "ح ن ن  -  3518"
-    },
-    {
-      "name": "حمود سالم الرشيدي",
-      "phone": "0552039083",
-      "rank": "جندي أول",
-      "plate": "د س م  -  8254"
-    },
-    {
-      "name": "نواف عائض الحارثي",
-      "phone": "0501802099",
-      "rank": "جندي أول",
-      "plate": "د ق ك  -  5142"
-    },
-    {
-      "name": "عساف عوض المالكي",
-      "phone": "0569373493",
-      "rank": "جندي أول",
-      "plate": "د ب ك 3827"
-    },
-    {
-      "name": "مهند حسين الشهراني",
-      "phone": "0581207430",
-      "rank": "عريف",
-      "plate": "ح ط س 3117"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-305": [
-    {
-      "name": "عيسى عيدان الرشيدي",
-      "phone": "0502737908",
-      "rank": "عريف",
-      "plate": "ب هـ ي -  8858"
-    },
-    {
-      "name": "عبدالرحمن هلال الحياوي",
-      "phone": "0501885767",
-      "rank": "جندي",
-      "plate": "ر هـ أ  -  1394"
-    },
-    {
-      "name": "جبران احمد الربيعي",
-      "phone": "0556138025",
-      "rank": "رقيب",
-      "plate": "د ا م -  8340"
-    },
-    {
-      "name": "نادر محمد عسيري",
-      "phone": "0559306280",
-      "rank": "وكيل رقيب",
-      "plate": "د ا م  -  8340"
-    },
-    {
-      "name": "فهد عبدالله مشعان المطيري",
-      "phone": "0531110806",
-      "rank": "عريف",
-      "plate": "د ع ن - 2018"
-    },
-    {
-      "name": "ابراهيم احمد الاحمري",
-      "phone": "050452766",
-      "rank": "وكيل رقيب",
-      "plate": "و ك هـ - 909"
-    },
-    {
-      "name": "مشهور جميل العتيبي",
-      "phone": "0534417193",
-      "rank": "جندي أول",
-      "plate": "ر ك م 6332"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-306": [
-    {
-      "name": "حسن حسن البارقي",
-      "phone": "0501416139",
-      "rank": "وكيل رقيب",
-      "plate": "ح ص م 5923"
-    },
-    {
-      "name": "نواف عبدالله الاسمري",
-      "phone": "0553228051",
-      "rank": "وكيل رقيب",
-      "plate": "ب و ط 4079"
-    },
-    {
-      "name": "سلطان عبدالله الاسمري",
-      "phone": "0551043119",
-      "rank": "عريف",
-      "plate": "ح ه و 6754"
-    },
-    {
-      "name": "عبدالله محمد ال مقبل",
-      "phone": "0592062982",
-      "rank": "جندي أول",
-      "plate": "ر د ب 5872"
-    },
-    {
-      "name": "محمد علي ال ملاهي",
-      "phone": "0501600487",
-      "rank": "عريف",
-      "plate": "ر ل ب 6919"
-    },
-    {
-      "name": "علي عبدالرحمن الشهراني",
-      "phone": "0556626847",
-      "rank": "عريف",
-      "plate": "ب ر ق 9395"
-    },
-    {
-      "name": "عبدالله فالح الاسمري",
-      "phone": "0503534916",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "عبد الرحمن سعيد ال فاهده",
-      "phone": "0532787136",
-      "rank": "وكيل رقيب",
-      "plate": "ح س ص -  5608"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-307": [
-    {
-      "name": "عبد الرحمن جبران ال خازم",
-      "phone": "0504733959",
-      "rank": "وكيل رقيب",
-      "plate": "ا ا ط - 7476"
-    },
-    {
-      "name": "علي مسند سند العازمي",
-      "phone": "0542441008",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "محمد ابراهيم",
-      "phone": "0561877748",
-      "rank": "رقيب",
-      "plate": "أ ي د  -  3416"
-    },
-    {
-      "name": "منصور حمدان العنزي",
-      "phone": "0531168665",
-      "rank": "رقيب",
-      "plate": "ح ط هـ 2400"
-    },
-    {
-      "name": "محمد مسيب عطيه الغامدي",
-      "phone": "0594041551",
-      "rank": "عريف",
-      "plate": "د ق و  -  5230"
-    },
-    {
-      "name": "ناصر سعيد الدوسري",
-      "phone": "0560608077",
-      "rank": "وكيل رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "خالد هليل الحربي",
-      "phone": "0546668503",
-      "rank": "رقيب",
-      "plate": "ح ص أ  -  4002"
-    },
-    {
-      "name": "عواد عيسى العنزي",
-      "phone": "0534525041",
-      "rank": "رقيب",
-      "plate": "ا ع ك -  2427"
-    },
-    {
-      "name": "عون سعيد القرني",
-      "phone": "0503952752",
-      "rank": "رقيب",
-      "plate": "د م ك -  8438"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-308": [
-    {
-      "name": "احمد دابس المطيري",
-      "phone": "0541962829",
-      "rank": "رقيب",
-      "plate": "د و و 1011"
-    },
-    {
-      "name": "محمد هملان المطيري",
-      "phone": "0599919496",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "سعد جاسر الظفيري",
-      "phone": "0563540444",
-      "rank": "رقيب",
-      "plate": "ر ن ط 1428"
-    },
-    {
-      "name": "بندر ابراهيم الشمري",
-      "phone": "0559979006",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "ابراهيم عمر مطلق النفيعي",
-      "phone": "0537388130",
-      "rank": "جندي",
-      "plate": "ر ع ق 3703"
-    },
-    {
-      "name": "نواف جارا الله المالكي",
-      "phone": "0535275024",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "عبد الله حماد الشلهوب",
-      "phone": "0505949100",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-309": [
-    {
-      "name": "علي يحيى غزواني",
-      "phone": "0505980318",
-      "rank": "وكيل رقيب",
-      "plate": "د د ع 9432"
-    },
-    {
-      "name": "خالد محمد الاحمري",
-      "phone": "0533405335",
-      "rank": "عريف",
-      "plate": "9030 ن ا"
-    },
-    {
-      "name": "موسى علي البارقي",
-      "phone": "0505492879",
-      "rank": "عريف",
-      "plate": "ح ق س 8494"
-    },
-    {
-      "name": "احمد عامر البارقي",
-      "phone": "0559684420",
-      "rank": "رقيب",
-      "plate": "ا ص ط 2467"
-    },
-    {
-      "name": "ظافر علي القرني",
-      "phone": "0568388831",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "فواز ماجد الشراري",
-      "phone": "0500403654",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "ابراهيم مرعي ال مرعي",
-      "phone": "0599111968",
-      "rank": "رقيب",
-      "plate": "د ك م 3653"
-    },
-    {
-      "name": "فهد محمد الهويش",
-      "phone": "0508999210",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "علي الاحمري",
-      "phone": "0534657903",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "سعيد سفر الاحمري",
-      "phone": "0530403438",
-      "rank": "رقيب",
-      "plate": "د ط ن 8778"
-    },
-    {
-      "name": "نايف عايد الرشيدي",
-      "phone": "0569297248",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-310": [
-    {
-      "name": "عبدالرحمن العنزي",
-      "phone": "0542451114",
-      "rank": "وكيل رقيب",
-      "plate": "ح ط ع -  8844"
-    },
-    {
-      "name": "فهد الشهراني",
-      "phone": "0546060922",
-      "rank": "رقيب",
-      "plate": "د ر م -  7120"
-    },
-    {
-      "name": "محمد الشهراني",
-      "phone": "0591114015",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "عبدالله خالد الاحمري",
-      "phone": "0558484400",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "عبدالله محمد الشهراني",
-      "phone": "0531323309",
-      "rank": "وكيل رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "تركي عبدالله الشهراني",
-      "phone": "0554859969",
-      "rank": "رقيب",
-      "plate": "ح ن هـ  -  8026"
-    },
-    {
-      "name": "يحيى عائض الشهراني",
-      "phone": "0549870444",
-      "rank": "رقيب",
-      "plate": "ح س ن 8948"
-    },
-    {
-      "name": "مشبب محمد الوقداني",
-      "phone": "0507778077",
-      "rank": "رقيب",
-      "plate": "د ع و 983"
-    },
-    {
-      "name": "اسامه عائض القرني",
-      "phone": "0503969439",
-      "rank": "جندي",
-      "plate": "د ر ب -  3370"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-311": [
-    {
-      "name": "صالح منصور الرشيدي",
-      "phone": "0591445732",
-      "rank": "عريف",
-      "plate": "د ع ن 4791"
-    },
-    {
-      "name": "حمدان دخيل الله المطيري",
-      "phone": "0508849101",
-      "rank": "عريف",
-      "plate": "ب و ك 9787"
-    },
-    {
-      "name": "بدر ناصر العنزي",
-      "phone": "0503449333",
-      "rank": "رقيب",
-      "plate": "د ك ل 1268"
-    },
-    {
-      "name": "ريان احمد الحربي",
-      "phone": "0552599486",
-      "rank": "عريف",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "ريان عبدالرزاق الذبياني",
-      "phone": "0566005807",
-      "rank": "جندي أول",
-      "plate": "ح ط ك 2848"
-    },
-    {
-      "name": "مشعل ضيف الله الحربي",
-      "phone": "0506977443",
-      "rank": "وكيل رقيب",
-      "plate": "ر ل ى -  3368"
-    },
-    {
-      "name": "سالم بخيت حمود الرفاعي الغامدي",
-      "phone": "0558563311",
-      "rank": "وكيل رقيب",
-      "plate": "ب ر ص 9252"
-    },
-    {
-      "name": "اسامه عايض غيثان القرني",
-      "phone": "0503969439",
-      "rank": "جندي",
-      "plate": "د ر ب 3370"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-312": [
-    {
-      "name": "منصور سعيد ال لعبان",
-      "phone": "0550209696",
-      "rank": "رقيب",
-      "plate": "د و ع 4890"
-    },
-    {
-      "name": "علي سعد الشهراني",
-      "phone": "0544492442",
-      "rank": "رقيب",
-      "plate": "ب ن ر 9759"
-    },
-    {
-      "name": "معيش عائش السبيعي",
-      "phone": "0555908055",
-      "rank": "رقيب",
-      "plate": "74992"
-    },
-    {
-      "name": "ظافر مسلط السعيد",
-      "phone": "0559888358",
-      "rank": "رقيب",
-      "plate": "د ل و 5116"
-    },
-    {
-      "name": "محمد عامر عسيري",
-      "phone": "0507892219",
-      "rank": "رقيب",
-      "plate": "م ل ق -  1968"
-    },
-    {
-      "name": "عبد الرحمن ناصر القحطاني",
-      "phone": "0553018614",
-      "rank": "رقيب",
-      "plate": "ب د ي 2000"
-    },
-    {
-      "name": "علي محمد ال جليل",
-      "phone": "0531395953",
-      "rank": "رقيب",
-      "plate": "ا ن م -  8557"
-    },
-    {
-      "name": "عبد الرحمن مانع القحطاني",
-      "phone": "0553313661",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-401": [
-    {
-      "name": "طلال فتحي ناصر معشي",
-      "phone": "0556404671",
-      "rank": "عريف",
-      "plate": "ا م ع  -  3335"
-    },
-    {
-      "name": "ياسر سعيد إبراهيم الزهراني",
-      "phone": "0538900886",
-      "rank": "وكيل رقيب",
-      "plate": "د ل أ  -  2977"
-    },
-    {
-      "name": "عبدالله سعود خلف الحربي",
-      "phone": "0595541442",
-      "rank": "رقيب",
-      "plate": "6758  ر ط  ب"
-    },
-    {
-      "name": "حامد احمد الجهني",
-      "phone": "0544839618",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "عادل فراج الحارثي",
-      "phone": "0507227055",
-      "rank": "رقيب",
-      "plate": "ا ع ي -  5955"
-    },
-    {
-      "name": "احمد سعد العتيبي",
-      "phone": "0540409612",
-      "rank": "وكيل رقيب",
-      "plate": "1107  ر د د"
-    },
-    {
-      "name": "بندر عبدالله الشهراني",
-      "phone": "0558813345",
-      "rank": "رقيب",
-      "plate": "ح ى د 9937"
-    },
-    {
-      "name": "بندر محمد الغامدي",
-      "phone": "0536718377",
-      "rank": "عريف",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "راكان فيصل الحارثي",
-      "phone": "0547345823",
-      "rank": "رقيب",
-      "plate": "د ب ن -  1756"
-    },
-    {
-      "name": "عبدالرحمن حسين القحطاني",
-      "phone": "0558955540",
-      "rank": "رقيب",
-      "plate": "ر ح م 6059"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-402": [
-    {
-      "name": "سلطان سالم القرني",
-      "phone": "0565608285",
-      "rank": "وكيل رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "نايف خالد عبده الصبياني",
-      "phone": "0598800047",
-      "rank": "وكيل رقيب",
-      "plate": "5568  ح ي ح"
-    },
-    {
-      "name": "بندر أحمد الزهراني",
-      "phone": "0557126790",
-      "rank": "عريف",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "عمر عود العنزي",
-      "phone": "0553140244",
-      "rank": "وكيل رقيب",
-      "plate": "8257  ر س ه"
-    },
-    {
-      "name": "عبدالمحسن شباب الغامدي",
-      "phone": "0507075542",
-      "rank": "وكيل رقيب",
-      "plate": "ا ذ ط 7249"
-    },
-    {
-      "name": "سعد محمد سعد الشهراني",
-      "phone": "0595502211",
-      "rank": "رقيب",
-      "plate": "د ا ح 5368"
-    },
-    {
-      "name": "عبدالرحمن يوسف السهيل",
-      "phone": "0502278871",
-      "rank": "رقيب",
-      "plate": "ح ك ر 7773"
-    },
-    {
-      "name": "نمر خلف العتيبي",
-      "phone": "0556004707",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "خالد العصيمي",
-      "phone": "0557330005",
-      "rank": "رقيب",
-      "plate": "ا ي ح 3 ا ى ح"
-    },
-    {
-      "name": "عبدالملك محمد الحربي",
-      "phone": "0566446656",
-      "rank": "عريف",
-      "plate": "ر س ر - 1007"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-403": [
-    {
-      "name": "مغرم محمد مغرم الغامدي",
-      "phone": "0538508090",
-      "rank": "رقيب",
-      "plate": "ح ص ك 1340"
-    },
-    {
-      "name": "محسن سلطان البيشي",
-      "phone": "0551600110",
-      "rank": "رقيب",
-      "plate": "ح س و 4602"
-    },
-    {
-      "name": "سعيد وصيوص الجهني",
-      "phone": "0536443707",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "علي عبدالله هزازي",
-      "phone": "0557544883",
-      "rank": "جندي أول",
-      "plate": "ر د ب 1973"
-    },
-    {
-      "name": "عبد اللطيف الرديني",
-      "phone": "0501076886",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "هاني سليمان العنزي",
-      "phone": "0531604442",
-      "rank": "وكيل رقيب",
-      "plate": "م و ر -  7196"
-    },
-    {
-      "name": "ظافر شويع الشهراني",
-      "phone": "0546748927",
-      "rank": "وكيل رقيب",
-      "plate": "م و ر - 7196"
-    },
-    {
-      "name": "فايز لطيف الفايدي",
-      "phone": "0557000709",
-      "rank": "رقيب",
-      "plate": "8582   ا ا ن"
-    },
-    {
-      "name": "احمد دابس المطيري",
-      "phone": "0541962829",
-      "rank": "رقيب",
-      "plate": "1011   د و و"
-    },
-    {
-      "name": "محمد هملان المطيري",
-      "phone": "0599919496",
-      "rank": "رقيب",
-      "plate": "لا يوجد"
-    },
-    {
-      "name": "سعد حربي جاسر الضفيري",
-      "phone": "0563540444",
-      "rank": "رقيب",
-      "plate": "1428   ر ن ط"
-    },
-    {
-      "name": "بندر ابراهيم الشمري",
-      "phone": "0559979006",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "خلف خليفه البرغش",
-      "phone": "0505870104",
-      "rank": "عريف",
-      "plate": "د س ب 1611"
-    },
-    {
-      "name": "ناصر محمد الحربي",
-      "phone": "0569441100",
-      "rank": "عريف",
-      "plate": "د ه ا 9708"
-    },
-    {
-      "name": "نواف جعفر القحطاني",
-      "phone": "0551857511",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "نواف العنزي",
-      "phone": "0503030204",
-      "rank": "رقيب",
-      "plate": ""
-    }
-  ],
-  "room-404": [
-    {
-      "name": "سعيد محمد سعيد القحطاني",
-      "phone": "0558205610",
-      "rank": "عريف",
-      "plate": "ر ك ط  -  7299"
-    },
-    {
-      "name": "عبدالرحمن عائض العمري",
-      "phone": "0569959990",
-      "rank": "رقيب",
-      "plate": "ب ص هـ 9147"
-    },
-    {
-      "name": "علي عامر الشهراني",
-      "phone": "0537685199",
-      "rank": "عريف",
-      "plate": "5740  د ص هـ"
-    },
-    {
-      "name": "احمد  محمد الغامدي",
-      "phone": "0500280815",
-      "rank": "رقيب",
-      "plate": "س ع د 6686"
-    },
-    {
-      "name": "محمد عبدالله العصيمي",
-      "phone": "053030825",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "ناصر سعد السعدي",
-      "phone": "0556886100",
-      "rank": "وكيل رقيب",
-      "plate": "ح ع ا 2810"
-    },
-    {
-      "name": "عبدالله سعيد الشهراني",
-      "phone": "0554009165",
-      "rank": "عريف",
-      "plate": "ح ع ا 2810"
-    },
-    {
-      "name": "عبد الرحمن مطرود الدهمشي العنزي",
-      "phone": "0542451114",
-      "rank": "وكيل رقيب",
-      "plate": "ح ط ع -  8833"
-    },
-    {
-      "name": "عائض سعيد العمري",
-      "phone": "0550232775",
-      "rank": "عريف",
-      "plate": "د ل ص -  5244"
-    },
-    {
-      "name": "سعد سعيد الشهراني",
-      "phone": "0550591048",
-      "rank": "عريف",
-      "plate": "م م ن -  8973"
-    },
-    {
-      "name": "سعد عامر الشهري",
-      "phone": "0557393055",
-      "rank": "وكيل رقيب",
-      "plate": "ب ح ع -  9842"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-405": [
-    {
-      "name": "مفلح معيض المطيري",
-      "phone": "0550712088",
-      "rank": "عريف",
-      "plate": "د ص د 4329"
-    },
-    {
-      "name": "عبدالله سعد الحربي",
-      "phone": "0537575433",
-      "rank": "جندي أول",
-      "plate": ""
-    },
-    {
-      "name": "نواف عون المطيري",
-      "phone": "0530031468",
-      "rank": "جندي أول",
-      "plate": ""
-    },
-    {
-      "name": "ناشي فهد الرويس",
-      "phone": "0552511698",
-      "rank": "عريف",
-      "plate": "د ل ه 4210"
-    },
-    {
-      "name": "جفين شداد الدعجاني العتيبي",
-      "phone": "0502223528",
-      "rank": "رقيب",
-      "plate": "ا و ب 5533"
-    },
-    {
-      "name": "حسام سعد الحربي",
-      "phone": "0540736790",
-      "rank": "جندي",
-      "plate": "ح ا س 9816"
-    },
-    {
-      "name": "سالم عويض الحارثي",
-      "phone": "0549301474",
-      "rank": "جندي أول",
-      "plate": "د ن ى"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-406": [
-    {
-      "name": "عثمان سعد السعيد",
-      "phone": "0544237030",
-      "rank": "رقيب",
-      "plate": "د س ح 1142"
-    },
-    {
-      "name": "متعب عائد الزاهرني",
-      "phone": "0544409141",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "سلطان سحمي القحطاني",
-      "phone": "0506999775",
-      "rank": "وكيل رقيب",
-      "plate": "ا ي ك 1037"
-    },
-    {
-      "name": "مبارك سابر الحارثي",
-      "phone": "0536043569",
-      "rank": "رقيب",
-      "plate": "د ل ق 3200"
-    },
-    {
-      "name": "انور احمد الزهراني",
-      "phone": "0504588400",
-      "rank": "عريف",
-      "plate": "ب ص و 3000"
-    },
-    {
-      "name": "سعيد مرعي القرني",
-      "phone": "0569070767",
-      "rank": "رقيب",
-      "plate": "ر ر ن 6915"
-    },
-    {
-      "name": "محمد سعد القحطاني",
-      "phone": "0558644720",
-      "rank": "رقيب",
-      "plate": "ر ط ك 5643"
-    },
-    {
-      "name": "فرج ظافر القحطاني",
-      "phone": "0509223887",
-      "rank": "وكيل رقيب",
-      "plate": "ر ق ن 4353"
-    },
-    {
-      "name": "محمد راكان السبيعي",
-      "phone": "0551200240",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "ماجد عبدالله الملحم",
-      "phone": "0542130007",
-      "rank": "رقيب",
-      "plate": "ح ص ا 9424"
-    },
-    {
-      "name": "محمد احمد حكمي",
-      "phone": "0553550347",
-      "rank": "رقيب",
-      "plate": "ر ا ن 4576"
-    },
-    {
-      "name": "ياسر علي القحطاني",
-      "phone": "0568773783",
-      "rank": "جندي",
-      "plate": "د د ب 2129"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-407": [
-    {
-      "name": "محمد احمد عقدي",
-      "phone": "0599911080",
-      "rank": "وكيل رقيب",
-      "plate": "د ع ك 4321"
-    },
-    {
-      "name": "بدر محمد مغفوري",
-      "phone": "0534783566",
-      "rank": "جندي أول",
-      "plate": ""
-    },
-    {
-      "name": "محمد يحي عطيه",
-      "phone": "0507799610",
-      "rank": "رقيب",
-      "plate": "د ن ع 6136"
-    },
-    {
-      "name": "يحيى محمد شاجري",
-      "phone": "0553843367",
-      "rank": "رقيب",
-      "plate": "ح ي ن 8254"
-    },
-    {
-      "name": "مهند عوض الوادعي",
-      "phone": "0505971783",
-      "rank": "رقيب",
-      "plate": "ح ع م 2935"
-    },
-    {
-      "name": "عصام حمد حمزي",
-      "phone": "0535530695",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "حسن جابر العيسىي",
-      "phone": "0566651123",
-      "rank": "رقيب",
-      "plate": "ر ح ص 5977"
-    },
-    {
-      "name": "نواف مظف سلطان الريعي",
-      "phone": "0552614457",
-      "rank": "وكيل رقيب",
-      "plate": "د ن ح 7620"
-    },
-    {
-      "name": "محمد ذيب القحطاني",
-      "phone": "0507363383",
-      "rank": "عريف",
-      "plate": "د ل ق 3710"
-    },
-    {
-      "name": "رامي احمد العتيبي",
-      "phone": "0553012961",
-      "rank": "وكيل رقيب",
-      "plate": "د ص د -  4302"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-408": [
-    {
-      "name": "طارق مسفر الشمراني",
-      "phone": "0507225716",
-      "rank": "عريف",
-      "plate": "ب ط ع 6814"
-    },
-    {
-      "name": "عبدالرحمن حسن الشهري",
-      "phone": "0550882027",
-      "rank": "رقيب",
-      "plate": "ح ن ل 7661"
-    },
-    {
-      "name": "فهد مديني عتودي",
-      "phone": "0560558650",
-      "rank": "عريف",
-      "plate": "ا م م 8003"
-    },
-    {
-      "name": "سلطان حسن سعد الدوسري",
-      "phone": "0534941648",
-      "rank": "عريف",
-      "plate": "ب م ه 1260"
-    },
-    {
-      "name": "احمد عبدالله الزهراني",
-      "phone": "0580245689",
-      "rank": "عريف",
-      "plate": "ع ب س 1441"
-    },
-    {
-      "name": "عبدالاله مفلح الحارثي",
-      "phone": "0500017465",
-      "rank": "عريف",
-      "plate": "د ن م 9608"
-    },
-    {
-      "name": "عبدالله ظافر القحطاني",
-      "phone": "0546253933",
-      "rank": "رقيب",
-      "plate": "ر ع و 6095"
-    },
-    {
-      "name": "محيي مشارع ال مزهر",
-      "phone": "0508335489",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "محمد راشد المهاشير",
-      "phone": "0508711144",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "علي حسين الناشري",
-      "phone": "0533009516",
-      "rank": "رقيب",
-      "plate": "د ل ب 9612"
-    },
-    {
-      "name": "باسل فرحان الشهري",
-      "phone": "0509079759",
-      "rank": "جندي",
-      "plate": ""
-    },
-    {
-      "name": "عبدالله محمد السهلي",
-      "phone": "0503982047",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "محمد ناصر المطيري",
-      "phone": "0506962590",
-      "rank": "رقيب",
-      "plate": "د ص ي 5778"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-409": [
-    {
-      "name": "بريك عبد الرحمن الشمراني",
-      "phone": "0501552299",
-      "rank": "رقيب",
-      "plate": "ا ر ن -  5156"
-    },
-    {
-      "name": "فيصل ناصر السبيعي",
-      "phone": "0530008149",
-      "rank": "عريف",
-      "plate": "د ص ي 5502"
-    },
-    {
-      "name": "عبدالله حسن الزهراني",
-      "phone": "0500782784",
-      "rank": "وكيل رقيب",
-      "plate": "د ي ب 2470"
-    },
-    {
-      "name": "يوسف عبدالكريم الشراري",
-      "phone": "0538996080",
-      "rank": "وكيل رقيب",
-      "plate": "ب س ك 7599"
-    },
-    {
-      "name": "غانم سالم الشراري",
-      "phone": "0509021815",
-      "rank": "وكيل رقيب",
-      "plate": "ب ح ع 1372"
-    },
-    {
-      "name": "مشعل  سالم البقمي",
-      "phone": "0530077892",
-      "rank": "رقيب",
-      "plate": "ر ق س 1515"
-    },
-    {
-      "name": "سلمان علي الزهراني",
-      "phone": "0553798674",
-      "rank": "رقيب",
-      "plate": "د م ي 4541"
-    },
-    {
-      "name": "عادل ضيف الله الشراري",
-      "phone": "0550963032",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "عبدالله عبدالرحمن المطيري",
-      "phone": "0537142945",
-      "rank": "عريف",
-      "plate": "د ك ه 2596"
-    },
-    {
-      "name": "خالد فيصل الغامدي",
-      "phone": "055099044",
-      "rank": "رقيب",
-      "plate": "ح م ن 926"
-    },
-    {
-      "name": "عبدالله سالم القرني",
-      "phone": "0533602663",
-      "rank": "عريف",
-      "plate": "د ه ر 6784"
-    },
-    {
-      "name": "عساف عايش المطيري",
-      "phone": "0565657634",
-      "rank": "عريف",
-      "plate": "ب ع ط 9188"
-    },
-    {
-      "name": "ابراهيم معيض الزهراني",
-      "phone": "0558862887",
-      "rank": "وكيل رقيب",
-      "plate": "ر ف و 8982"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-410": [
-    {
-      "name": "مسفر حمود مهدي السبيعي",
-      "phone": "0559924666",
-      "rank": "وكيل رقيب",
-      "plate": "د ط س 5647"
-    },
-    {
-      "name": "حمدان دخيل الله المطيري",
-      "phone": "0508849101",
-      "rank": "عريف",
-      "plate": "9787"
-    },
-    {
-      "name": "بدر ناصر جربوع",
-      "phone": "0503449333",
-      "rank": "رقيب",
-      "plate": "النترا"
-    },
-    {
-      "name": "عبدالهادي علي القحطاني",
-      "phone": "053266629",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "صالح منصور الرشيدي",
-      "phone": "0591445732",
-      "rank": "عريف",
-      "plate": "د ع ن"
-    },
-    {
-      "name": "سطام عوض الرشيدي",
-      "phone": "0557909033",
-      "rank": "وكيل رقيب",
-      "plate": "3495"
-    },
-    {
-      "name": "عبد الرحمن ناصر القحطاني",
-      "phone": "0562727999",
-      "rank": "رقيب",
-      "plate": "ب ق هـ  -  4428"
-    },
-    {
-      "name": "عبدالعزيز سعد القحطاني",
-      "phone": "0502308451",
-      "rank": "عريف",
-      "plate": "د ي د - 8283"
-    },
-    {
-      "name": "سلطان منصور القحطاني",
-      "phone": "0503646271",
-      "rank": "عريف",
-      "plate": ""
-    },
-    {
-      "name": "عبدالله محمد علي القحطاني",
-      "phone": "0530635289",
-      "rank": "عريف",
-      "plate": "ر د هـ -  1763"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-411": [
-    {
-      "name": "شادي نوفل السبيله",
-      "phone": "0567029619",
-      "rank": "وكيل رقيب",
-      "plate": ""
-    },
-    {
-      "name": "احمد حسن الاحمري",
-      "phone": "0566700128",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "ابراهيم محمد ال موهوب",
-      "phone": "0533770834",
-      "rank": "رقيب",
-      "plate": "د ل ع 2132"
-    },
-    {
-      "name": "عبدالله عبدالرحمن الاسمري",
-      "phone": "0559898333",
-      "rank": "رقيب",
-      "plate": "ه ع ه 55"
-    },
-    {
-      "name": "سامي سعيد الشهري",
-      "phone": "0537381099",
-      "rank": "وكيل رقيب",
-      "plate": "ح ل ه 2015"
-    },
-    {
-      "name": "راكان سالم",
-      "phone": "0536348737",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "مشبب معوضه القحطاني",
-      "phone": "0504824007",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "محمد سعيد القحطاني",
-      "phone": "0544811181",
-      "rank": "وكيل رقيب",
-      "plate": "ر ط ص 2294"
-    },
-    {
-      "name": "سلطان علي الزهراني",
-      "phone": "0506060755",
-      "rank": "رقيب",
-      "plate": "د ل ط -  6906"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ],
-  "room-412": [
-    {
-      "name": "محمد سالم علي الشهري",
-      "phone": "0532042384",
-      "rank": "رقيب",
-      "plate": "ر ط ي 9712"
-    },
-    {
-      "name": "هويمل ابراهيم العطوي",
-      "phone": "053177703",
-      "rank": "عريف",
-      "plate": "د ق ص 7814"
-    },
-    {
-      "name": "محمد عبدالله العطوي",
-      "phone": "0532387847",
-      "rank": "جندي أول",
-      "plate": ""
-    },
-    {
-      "name": "عبدالعزيز خالد الرويلي",
-      "phone": "0533327443",
-      "rank": "رقيب",
-      "plate": "ح ك ع 8401"
-    },
-    {
-      "name": "سعد سعيد القحطاني",
-      "phone": "0554041769",
-      "rank": "رقيب",
-      "plate": ""
-    },
-    {
-      "name": "وليد سعد العلوي",
-      "phone": "0557056129",
-      "rank": "عريف",
-      "plate": "ر ة ا 9885"
-    },
-    {
-      "name": "سلطان عطالله العطوي",
-      "phone": "0533367792",
-      "rank": "رقيب",
-      "plate": "ر ه د 7220"
-    },
-    {
-      "name": "خالد محسن المطيري",
-      "phone": "0554885524",
-      "rank": "رقيب",
-      "plate": "ح و س -  3315"
-    },
-    {
-      "name": "منصور عبد الرحمن ال مغدي",
-      "phone": "0554513013",
-      "rank": "عريف",
-      "plate": "و ى ع 101"
-    },
-    {
-      "name": "مسفر مداوي القحطاني",
-      "phone": "0535713054",
-      "rank": "وكيل رقيب",
-      "plate": "د س د -  1547"
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    },
-    {
-      "name": "",
-      "phone": "",
-      "rank": "",
-      "plate": ""
-    }
-  ]
-}`);
+    function loadMain() {
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('export-btn').style.display = 'none';
+      document.getElementById('report-link-btn').style.display = 'none';
 
-function saveToStorage() {
-localStorage.setItem('housingData', JSON.stringify(data));
-}
+      let totalCapacity = 0;
+      let filled = 0;
+      let officerCount = 0;
+      let enlistedCount = 0;
+      let carCount = 0;
+      const officerRanks = ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'];
 
-function loadMain() {
-  let totalCapacity = 0;
-  let filled = 0;
-  let officerCount = 0;
-  let enlistedCount = 0;
-  let carCount = 0;
-  const officerRanks = ranks[1];
+      Object.keys(data).forEach(roomKey => {
+        const room = data[roomKey];
+        totalCapacity += room.length;
+        room.forEach(person => {
+          if (person.name) filled++;
+          if (person.rank) {
+            if (officerRanks.includes(person.rank)) officerCount++;
+            else enlistedCount++;
+          }
+          if (person.plate && person.plate.trim() !== '') carCount++;
+        });
+      });
 
-  Object.keys(data).forEach(roomKey => {
-    const room = data[roomKey];
-    totalCapacity += room.length;
-    room.forEach(person => {
-      if (person.name) filled++;
-      if (person.plate && person.plate.trim() !== '') carCount++;
-      if (person.rank) {
-        if (officerRanks.includes(person.rank)) officerCount++;
-        else enlistedCount++;
-      }
-    });
-  });
+      document.getElementById('cards').innerHTML = `
+        <div class="stats-container">
+          <div class="stat-box"><div>السعة الإجمالية</div><div class="stat-number">${totalCapacity}</div></div>
+          <div class="stat-box"><div>الطاقة المتاحة للتسكين</div><div class="stat-number">${totalCapacity - filled}</div></div>
+          <div class="stat-box"><div>عدد الضيوف الحاليين</div><div class="stat-number">${filled}</div></div>
+          <div class="stat-box"><div>الضباط</div><div class="stat-number">${officerCount}</div></div>
+          <div class="stat-box"><div>الأفراد</div><div class="stat-number">${enlistedCount}</div></div>
+          <div class="stat-box"><div>السيارات</div><div class="stat-number">${carCount}</div></div>
+        </div>
+      `;
+    }
 
-  document.getElementById('cards').innerHTML = `
-    <div class="stats-container">
-      <div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">${totalCapacity}</div></div>
-      <div class="stat-box"><div>الطاقة المتاحة للتسكين</div><div class="stat-number">${totalCapacity - filled}</div></div>
-      <div class="stat-box"><div>عدد الضيوف الحاليين</div><div class="stat-number">${filled}</div></div>
-      <div class="stat-box"><div>الضباط</div><div class="stat-number">${officerCount}</div></div>
-      <div class="stat-box"><div>الأفراد</div><div class="stat-number">${enlistedCount}</div></div>
-      <div class="stat-box"><div>السيارات</div><div class="stat-number">${carCount}</div></div>
-    </div>
-  `;
-  document.getElementById('search').style.display = 'none';
-  document.getElementById('export-btn').style.display = 'none';
-}
+    function loadFloor(floor) {
+      const container = document.getElementById('cards');
+      container.innerHTML = '';
 
-function countGuests() {
-return Object.values(data).flat().filter(x => x.name).length;
-}
+      // إظهار خانة البحث فقط عند الضغط على "الجميع"
+      const searchInput = document.getElementById('search');
+      searchInput.value = '';
+      searchInput.style.display = (floor === 0 ? 'block' : 'none');
 
-function countRanks(type) {
-const officerRanks = ranks[1];
-return Object.values(data).flat().filter(x => {
-if (!x.rank) return false;
-if (type === 'ضباط') return officerRanks.includes(x.rank);
-else return !officerRanks.includes(x.rank);
-}).length;
-}
+      // إظهار أزرار التقارير فقط عند الضغط على "الجميع"
+      document.getElementById('export-btn').style.display = (floor === 0 ? 'block' : 'none');
+      document.getElementById('report-link-btn').style.display = (floor === 0 ? 'block' : 'none');
 
-function countCars() {
-return Object.values(data).flat().filter(x => x.plate && x.plate.trim() !== '').length;
-}
+      // ترتيب مفاتيح الغرف تصاعديًا حسب الرقم
+      const keys = Object.keys(data).sort((a, b) => {
+        const numA = parseInt(a.split('-')[1]);
+        const numB = parseInt(b.split('-')[1]);
+        return numA - numB;
+      });
 
-function loadFloor(floor) {
-currentFloor = floor;
-document.getElementById('search').value = '';
-const container = document.getElementById('cards');
-container.innerHTML = '';
-
-if (floor === 0) {
-document.getElementById('search').style.display = 'block';
-document.getElementById('export-btn').style.display = 'block';
-for (let f = 1; f <= 4; f++) {
-for (let i = 1; i <= roomCounts[f]; i++) {
-const roomNumber = `${f}${i.toString().padStart(2, '0')}`;
-const roomKey = `room-${roomNumber}`;
-if (!data[roomKey]) {
-data[roomKey] = Array.from({ length: occupantsPerRoom[f] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
-}
-const card = createRoomCard(roomKey, roomNumber, f);
-container.appendChild(card);
-}
-}
-} else {
-document.getElementById('search').style.display = 'none';
-document.getElementById('export-btn').style.display = 'none';
-for (let i = 1; i <= roomCounts[floor]; i++) {
-const roomNumber = `${floor}${i.toString().padStart(2, '0')}`;
-const roomKey = `room-${roomNumber}`;
-if (!data[roomKey]) {
-data[roomKey] = Array.from({ length: occupantsPerRoom[floor] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
-}
-const card = createRoomCard(roomKey, roomNumber, floor);
-container.appendChild(card);
-}
-}
-saveToStorage();
-}
-
-function createRoomCard(roomKey, roomNumber, floor) {
-const card = document.createElement('div');
-card.className = 'room-card';
-card.id = roomKey;
-
-const title = document.createElement('div');
-title.className = 'room-title';
-title.textContent = `غـرفـة | ${roomNumber}`;
-
-const toggle = document.createElement('button');
-toggle.className = 'toggle-btn';
-toggle.innerHTML = '+';
-toggle.style.textAlign = 'left';  // هذه السطر لضبط المحاذاة على اليسار
-toggle.onclick = () => {
-  card.classList.toggle('open');
-  toggle.innerHTML = card.classList.contains('open') ? '-' : '+';
-};
-
-const dots = document.createElement('div');
-dots.className = 'status-dots';
-data[roomKey].forEach(occ => {
-const dot = document.createElement('div');
-dot.className = 'dot' + (occ.name ? ' filled' : '');
-dots.appendChild(dot);
-});
-
-const occContainer = document.createElement('div');
-occContainer.className = 'occupants';
-
-data[roomKey].forEach((occ, idx) => {
-const occDiv = document.createElement('div');
-occDiv.className = 'occupant';
-occDiv.innerHTML = `
-<input type="text" placeholder="الإسم" value="${occ.name}" oninput="updateField('${roomKey}', ${idx}, 'name', this.value)">
-<input type="tel" placeholder="رقم الجوال" maxlength="10" value="${occ.phone}" oninput="updateField('${roomKey}', ${idx}, 'phone', this.value)">
-<select onchange="updateField('${roomKey}', ${idx}, 'rank', this.value)">
-<option value="">الرتبة</option>
-${ranks[floor].map(rank => `<option value="${rank}" ${occ.rank === rank ? 'selected' : ''}>${rank}</option>`).join('')}
-</select>
-<input type="text" placeholder="رقم اللوحة" value="${occ.plate}" oninput="updateField('${roomKey}', ${idx}, 'plate', this.value)">
-`;
-occContainer.appendChild(occDiv);
-});
-
-card.appendChild(title);
-card.appendChild(toggle);
-card.appendChild(dots);
-card.appendChild(occContainer);
-
-return card;
-}
-
-function updateField(room, index, field, value) {
-data[room][index][field] = value;
-saveToStorage();
-const dotsContainer = document.querySelector(`#${room} .status-dots`);
-dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
-}
-
-function searchRooms() {
-const val = document.getElementById('search').value.trim();
-const cards = document.querySelectorAll('.room-card');
-cards.forEach(card => {
-const roomData = data[card.id];
-const match = roomData.some(occ =>
-occ.name.includes(val) || occ.phone.includes(val) || occ.rank.includes(val) || occ.plate.includes(val)
-);
-card.style.display = match ? 'block' : 'none';
-if (match) card.classList.remove('open');
-});
-}
-
-function exportData() {
-  const now = new Date();
-
-  // التاريخ الميلادي بصيغة: 2025/04/23
-  const gregorianDate = now.toLocaleDateString('en-GB').split('/').reverse().join('/');
-
-  // اليوم باللغة العربية
-  const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
-
-  // الوقت بصيغة: الساعة | 4:23 AM
-  const hours = now.getHours();
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const period = hours >= 12 ? 'PM' : 'AM';
-  const formattedHour = hours % 12 || 12;
-  const formattedTime = `الساعة | ${formattedHour}:${minutes} ${period}`;
-
-  let output = `تقرير مبنى رابطة العالم الإسلامي\n`;
-  output += `التاريخ | ${gregorianDate}\n`;
-  output += `اليوم | ${dayName}\n`;
-  output += `${formattedTime}\n\n`;
-
-  Object.keys(data).forEach(room => {
-    if (data[room].some(occ => occ.name)) {
-      output += `• غرفة | ${room.replace('room-', '')}\n`;
-      data[room].forEach(occ => {
-        if (occ.name) {
-          output += `الاسم: ${occ.name}\nالرقم: ${occ.phone}\nالرتبة: ${occ.rank}\nاللوحة: ${occ.plate}\n\n`;
+      // عرض كل الغرف إذا floor = 0، وإلا عرض الطابق المحدد
+      keys.forEach(key => {
+        const fl = parseInt(key.split('-')[1][0]);
+        if (floor === 0 || fl === floor) {
+          const card = createRoomCard(key, key.split('-')[1]);
+          container.appendChild(card);
         }
       });
     }
-  });
 
-  const newWindow = window.open('', '', 'width=800,height=600');
-  newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold; white-space: pre-wrap;">${output}</pre>`);
-}
+    function createRoomCard(roomKey, roomNumber) {
+      const card = document.createElement('div');
+      card.className = 'room-card';
 
-loadMain();
-</script>
+      const title = document.createElement('div');
+      title.className = 'room-title';
+      title.textContent = `غرفة | ${roomNumber}`;
 
+      const toggle = document.createElement('button');
+      toggle.className = 'toggle-btn';
+      toggle.innerHTML = '+';
+      toggle.onclick = () => {
+        const occContainer = card.querySelector('.occupants');
+        occContainer.style.display = occContainer.style.display === 'block' ? 'none' : 'block';
+        toggle.innerHTML = occContainer.style.display === 'block' ? '-' : '+';
+      };
+
+      const filledCount = data[roomKey].filter(o => o.name).length;
+      const capacity = data[roomKey].length;
+      const occupiedDiv = document.createElement('div');
+      occupiedDiv.className = 'occupied-count';
+      occupiedDiv.textContent = `${filledCount} / ${capacity}`;
+
+      const dots = document.createElement('div');
+      dots.className = 'status-dots';
+      data[roomKey].forEach(occ => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (occ.name ? ' filled' : '');
+        dots.appendChild(dot);
+      });
+
+      const occContainer = document.createElement('div');
+      occContainer.className = 'occupants';
+      occContainer.style.display = 'none';
+
+      data[roomKey].forEach((occ, idx) => {
+        const occDiv = document.createElement('div');
+        occDiv.className = 'occupant';
+        occDiv.innerHTML = `
+          <input type="text" placeholder="الإسم" value="${occ.name}" oninput="updateField('${roomKey}', ${idx}, 'name', this.value)">
+          <input type="tel" placeholder="رقم الجوال" maxlength="10" value="${occ.phone}" oninput="updateField('${roomKey}', ${idx}, 'phone', this.value)">
+          <select onchange="updateField('${roomKey}', ${idx}, 'rank', this.value)">
+            <option value="">الرتبة</option>
+            ${['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء']
+              .map(rank => `<option value="${rank}" ${occ.rank === rank ? 'selected' : ''}>${rank}</option>`)
+              .join('')}
+          </select>
+          <select onchange="updateField('${roomKey}', ${idx}, 'grade', this.value)">
+            <option value="">المرتبة</option>
+            ${Array.from({length:14}, (_,i)=>i+1).map(n=>`<option value="${n}" ${occ.grade==n? 'selected':''}>${n}</option>`).join('')}
+          </select>
+          <input type="text" placeholder="رقم اللوحة" value="${occ.plate}" oninput="updateField('${roomKey}', ${idx}, 'plate', this.value)">
+        `;
+        occContainer.appendChild(occDiv);
+      });
+
+      card.appendChild(title);
+      card.appendChild(toggle);
+      card.appendChild(occupiedDiv);
+      card.appendChild(dots);
+      card.appendChild(occContainer);
+
+      return card;
+    }
+
+    function updateField(room, index, field, value) {
+      data[room][index][field] = value;
+      saveToStorage();
+      document.querySelectorAll('.room-card').forEach(card => {
+        const rNum = card.querySelector('.room-title').textContent.split('|')[1].trim();
+        const key = 'room-' + rNum;
+        if (key === room) {
+          const occArr = data[room];
+          const filledCount = occArr.filter(o => o.name).length;
+          const capacity = occArr.length;
+          card.querySelector('.occupied-count').textContent = `${filledCount} / ${capacity}`;
+          card.querySelectorAll('.dot').forEach((dot, idx) => {
+            dot.className = occArr[idx].name ? 'dot filled' : 'dot';
+          });
+        }
+      });
+    }
+
+    function searchRooms() {
+      const val = document.getElementById('search').value.trim().toLowerCase();
+      document.querySelectorAll('.room-card').forEach(card => {
+        const rNum = card.querySelector('.room-title').textContent.split('|')[1].trim();
+        const key = 'room-' + rNum;
+        const roomData = data[key];
+        // مقارنة بحالة الأحرف المنخفضة والتحقق من رقم الغرفة
+        const match = roomData.some(occ => {
+          return (occ.name.toLowerCase().includes(val) ||
+                  occ.phone.toLowerCase().includes(val) ||
+                  occ.rank.toLowerCase().includes(val) ||
+                  occ.grade.toLowerCase().includes(val) ||
+                  occ.plate.toLowerCase().includes(val));
+        }) || rNum.includes(val);
+        card.style.display = match ? 'block' : 'none';
+      });
+    }
+
+    function loadDuplicates() {
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('export-btn').style.display = 'none';
+      document.getElementById('report-link-btn').style.display = 'none';
+      const container = document.getElementById('cards');
+      container.innerHTML = '<div class="duplicates-container" id="dup-container"></div>';
+      const dupContainer = document.getElementById('dup-container');
+
+      // تشابه الأسماء فقط
+      const nameCount = {};
+      Object.keys(data).forEach(room => {
+        data[room].forEach(occ => {
+          if (occ.name) nameCount[occ.name] = (nameCount[occ.name] || []).concat(room);
+        });
+      });
+
+      Object.keys(nameCount).forEach(value => {
+        const rooms = Array.from(new Set(nameCount[value]));
+        if (value && rooms.length > 1) {
+          const dupCard = document.createElement('div');
+          dupCard.className = 'dup-card';
+          const roomsList = rooms.map(r => r.replace('room-', '')).join(' - ');
+          dupCard.textContent = `• تشابه في الاسم
+( ${value} )
+الغرف ( ${roomsList} )`;
+          dupContainer.appendChild(dupCard);
+        }
+      });
+    }
+
+    function exportData() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const gregorianDate = `${year}/${month}/${day}`;
+      const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const period = hours >= 12 ? 'م' : 'ص';
+      const formattedHour = hours % 12 || 12;
+      const formattedTime = `الساعة | ${formattedHour}:${minutes} ${period}`;
+
+      let html = `<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <style> body { font-family: 'Arial'; padding: 20px; direction: rtl; text-align: right; } 
+    /* تنسيقات لوحة المهام */
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .tasks-header button {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .tasks-container {
+      display: flex; flex-direction: row; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .task-card {
+      background-color: white; color: black; padding: 10px;
+      border-radius: 8px;
+      color: white;
+    }
+    .task-card input,
+    .task-card textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .task-card textarea {
+      height: 60px;
+      resize: none;
+    }
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .task-actions button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+    }
+    .task-actions .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+      background-color: #ccc;
+      vertical-align: middle;
+    }
+
+  
+    /* تنسيق كرت الصفحة الرئيسية يبقى */
+    /* تنسيق لوحة المهام */
+    .cards-container .tasks-header {
+      grid-column: 1 / -1 !important;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tasks-container {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+      gap: 15px !important;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .task-card {
+      background-color: #2c2c2c !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+    .task-buttons {
+      text-align: center !important;
+      margin-top: 10px !important;
+    }
+    /* إزالة أي تموضع ثابت سابق للزر */
+    .tasks-header {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
+
+</style>
+</head>
+<body>
+  <div>تقرير مبنى رابطة العالم الإسلامي</div>
+  <div>التاريخ | ${gregorianDate}</div>
+  <div>اليوم | ${dayName}</div>
+  <div>${formattedTime}</div><br/>`;
+
+      Object.keys(data).sort((a, b) => {
+        const numA = parseInt(a.split('-')[1]);
+        const numB = parseInt(b.split('-')[1]);
+        return numA - numB;
+      }).forEach(room => {
+        if (data[room].some(occ => occ.name)) {
+          const roomNum = room.replace('room-', '');
+          html += `<div>• غرفة | ${roomNum}</div>`;
+          data[room].forEach(occ => {
+            if (occ.name) {
+              html += `<div>الاسم: ${occ.name}</div>`;
+              html += `<div>الرقم: ${occ.phone}</div>`;
+              if (occ.rank) html += `<div>الرتبة: ${occ.rank}</div>`;
+              if (occ.grade) html += `<div>المرتبة: ${occ.grade}</div>`;
+              html += `<div>اللوحة: ${occ.plate}</div><br/>`;
+            }
+          });
+        }
+      });
+
+      html += `</body></html>`;
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.write(html);
+    }
+
+    function exportBuildingReport() {
+      const now = new Date();
+      const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+      const hijriDate = '1446/11/21هـ';
+
+      let html = `<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <style> body { font-family: 'Arial'; padding: 20px; direction: rtl; text-align: right; } 
+    /* تنسيقات لوحة المهام */
+    .tasks-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .tasks-header button {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0b2545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .tasks-container {
+      display: flex; flex-direction: row; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .task-card {
+      background-color: white; color: black; padding: 10px;
+      border-radius: 8px;
+      color: white;
+    }
+    .task-card input,
+    .task-card textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box;
+    }
+    .task-card textarea {
+      height: 60px;
+      resize: none;
+    }
+    .task-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .task-actions button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+    }
+    .task-actions .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 5px;
+      background-color: #ccc;
+      vertical-align: middle;
+    }
+
+  
+    /* تنسيق كرت الصفحة الرئيسية يبقى */
+    /* تنسيق لوحة المهام */
+    .cards-container .tasks-header {
+      grid-column: 1 / -1 !important;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tasks-container {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+      gap: 15px !important;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .task-card {
+      background-color: #2c2c2c !important;
+      color: white !important;
+      padding: 15px !important;
+      border-radius: 8px !important;
+      text-align: center !important;
+      box-sizing: border-box !important;
+    }
+    .task-buttons {
+      text-align: center !important;
+      margin-top: 10px !important;
+    }
+    /* إزالة أي تموضع ثابت سابق للزر */
+    .tasks-header {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
+
+</style>
+</head>
+<body>
+  <div>🛑 تقرير مبنى الرابطة 🛑</div>
+  <div>اليوم / ${dayName}</div>
+  <div>الموافق : ${hijriDate}</div><br/>`;
+
+      const totalOccupied = Object.values(data).flat().filter(o => o.name).length;
+      html += `<div>🔺 عدد الساكنين : (${totalOccupied})</div><hr/>`;
+
+      const officerRanks = ['ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'];
+      let officerCount = 0, enlistedCount = 0;
+      Object.values(data).flat().forEach(o => {
+        if (o.rank) {
+          if (officerRanks.includes(o.rank)) officerCount++;
+          else enlistedCount++;
+        }
+      });
+      html += `<div>- الضباط   عدد (${officerCount})</div>`;
+      html += `<div>- الأفراد   عدد (${enlistedCount})</div><br/>`;
+
+      html += `<div>الشرطة العسكرية ( 5 )</div>`;
+      html += `<div>التوثيق الأمني ( 4 )</div>`;
+      html += `<div>الإشراف الغذائي ( 4 )</div>`;
+      html += `<div>المصورين ( 12 )</div>`;
+      html += `<div>سائق الباص ( 9 )</div>`;
+      html += `<hr/>`;
+
+      html += `<div>🔺 الملاحظة 🔺</div>`;
+      html += `<div>* تواجد منسوبي الشرطة العسكرية</div>`;
+      html += `<div>* تواجد عدد (    ) عاملين متواجدين على مدار اليوم تم تنظيف المبنى كامل</div>`;
+      html += `<div>* تواجد عدد (    ) عامل من شركة القناص</div>`;
+      html += `</body></html>`;
+
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.write(html);
+    }
+
+    
+    // بيانات المهام
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('export-btn').style.display = 'none';
+      document.getElementById('report-link-btn').style.display = 'none';
+      document.getElementById('cards').innerHTML = '';
+      const cards = document.getElementById('cards');
+      // زر إضافة المهمة
+      const header = document.createElement('div');
+      header.className = 'tasks-header';
+      const addBtn = document.createElement('button');
+      addBtn.textContent = '+';
+      addBtn.onclick = addTask;
+      header.appendChild(addBtn);
+      cards.appendChild(header);
+      // حاوية المهام
+      const container = document.createElement('div');
+      container.className = 'tasks-container';
+      container.id = 'tasks-container';
+      cards.appendChild(container);
+      tasks.forEach((task, index) => renderTask(task, index));
+    }
+
+    
+    function addTask() {
+      const task = { type: '', details: '', status: 'pending' };
+      tasks.unshift(task);
+      saveTasks();
+      const container = document.getElementById('tasks-container');
+      container.innerHTML = '';
+      tasks.forEach((task, index) => renderTask(task, index));
+    }
+    
+
+    function renderTask(task, index) {
+      const container = document.getElementById('tasks-container');
+      const card = document.createElement('div');
+      card.className = 'task-card';
+      card.setAttribute('data-index', index);
+      card.innerHTML = `
+        <input type="text" class="task-type" placeholder="نوع المهمة" value="${task.type}" oninput="updateTaskField(${index}, 'type', this.value)">
+        <textarea class="task-details" placeholder="التفاصيل" oninput="updateTaskField(${index}, 'details', this.value)">${task.details}</textarea>
+        <div class="task-actions">
+          <button onclick="setTaskStatus(${index}, 'pending')">تحت المعالجة <span class="dot pending"></span></button>
+          <button onclick="setTaskStatus(${index}, 'done')">تمت المعالجة <span class="dot done"></span></button>
+        </div>
+      `;
+      container.appendChild(card);
+      updateTaskStatusDisplay(card, task.status);
+    }
+
+    function updateTaskField(index, field, value) {
+      tasks[index][field] = value;
+      saveTasks();
+    }
+
+    function setTaskStatus(index, status) {
+      tasks[index].status = status;
+      saveTasks();
+      const card = document.querySelector(`.task-card[data-index="${index}"]`);
+      updateTaskStatusDisplay(card, status);
+    }
+
+    function updateTaskStatusDisplay(card, status) {
+      const pendingDot = card.querySelector('.dot.pending');
+      const doneDot = card.querySelector('.dot.done');
+      pendingDot.style.backgroundColor = status === 'pending' ? 'orange' : '#ccc';
+      doneDot.style.backgroundColor = status === 'done' ? 'green' : '#ccc';
+    }
+
+
+    window.onload = function() {
+      loadMain();
+    };
+  </script>
 </body>
 </html>
