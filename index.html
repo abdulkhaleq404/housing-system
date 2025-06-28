@@ -366,26 +366,9 @@
       transform: none !important;
     }
 
-
-    /* زر الحذف تحت خيارات الحالة */
-    .task-delete {
-      text-align: center;
-      margin: 10px 0;
-    }
-
 </style>
 </head>
 <body>
-  <!-- شاشة تسجيل الدخول -->
-  <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
-    <h2>تسجيل الدخول</h2>
-    <input id="login-username" type="text" placeholder="Username" style="padding:8px; margin:8px 0; width:250px;"/>
-    <input id="login-password" type="password" placeholder="Password" style="padding:8px; margin:8px 0; width:250px;"/>
-    <button id="login-button" style="padding:8px 16px; margin:8px 0;">دخول</button>
-  </div>
-  <!-- محتوى التطبيق -->
-  <div id="app" style="display:none;">
-
   <div id="logo2">
     <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار ثانوي" style="max-width: 250px; height: auto;">
   </div>
@@ -412,34 +395,7 @@
 
   <div id="cards" class="cards-container"></div>
 
-  
-<script>
-// Authentication
-const ADMIN_USER = '8';
-const ADMIN_PASS = '8';
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('login-button').addEventListener('click', () => {
-    const user = document.getElementById('login-username').value;
-    const pass = document.getElementById('login-password').value;
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
-      sessionStorage.setItem('loggedIn','true');
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      loadMain();
-    } else {
-      alert('اسم المستخدم أو كلمة المرور غير صحيحة');
-    }
-  });
-  if (sessionStorage.getItem('loggedIn') === 'true') {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadMain();
-  }
-});
-</script>
-
-<script>
+  <script>
     // بيانات وهمية مبدئية
     let data = JSON.parse(localStorage.getItem('housingData') || `{
       "room-101": [
@@ -786,26 +742,9 @@ document.addEventListener('DOMContentLoaded', () => {
       transform: none !important;
     }
 
-
-    /* زر الحذف تحت خيارات الحالة */
-    .task-delete {
-      text-align: center;
-      margin: 10px 0;
-    }
-
 </style>
 </head>
 <body>
-  <!-- شاشة تسجيل الدخول -->
-  <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
-    <h2>تسجيل الدخول</h2>
-    <input id="login-username" type="text" placeholder="Username" style="padding:8px; margin:8px 0; width:250px;"/>
-    <input id="login-password" type="password" placeholder="Password" style="padding:8px; margin:8px 0; width:250px;"/>
-    <button id="login-button" style="padding:8px 16px; margin:8px 0;">دخول</button>
-  </div>
-  <!-- محتوى التطبيق -->
-  <div id="app" style="display:none;">
-
   <div>تقرير مبنى رابطة العالم الإسلامي</div>
   <div>التاريخ | ${gregorianDate}</div>
   <div>اليوم | ${dayName}</div>
@@ -831,8 +770,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      html += `  </div>
-</body></html>`;
+      html += `</body></html>`;
       const reportWindow = window.open("", "_blank");
       reportWindow.document.write(html);
     }
@@ -948,26 +886,9 @@ document.addEventListener('DOMContentLoaded', () => {
       transform: none !important;
     }
 
-
-    /* زر الحذف تحت خيارات الحالة */
-    .task-delete {
-      text-align: center;
-      margin: 10px 0;
-    }
-
 </style>
 </head>
 <body>
-  <!-- شاشة تسجيل الدخول -->
-  <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; margin-top:50px;">
-    <h2>تسجيل الدخول</h2>
-    <input id="login-username" type="text" placeholder="Username" style="padding:8px; margin:8px 0; width:250px;"/>
-    <input id="login-password" type="password" placeholder="Password" style="padding:8px; margin:8px 0; width:250px;"/>
-    <button id="login-button" style="padding:8px 16px; margin:8px 0;">دخول</button>
-  </div>
-  <!-- محتوى التطبيق -->
-  <div id="app" style="display:none;">
-
   <div>🛑 تقرير مبنى الرابطة 🛑</div>
   <div>اليوم / ${dayName}</div>
   <div>الموافق : ${hijriDate}</div><br/>`;
@@ -997,8 +918,7 @@ document.addEventListener('DOMContentLoaded', () => {
       html += `<div>* تواجد منسوبي الشرطة العسكرية</div>`;
       html += `<div>* تواجد عدد (    ) عاملين متواجدين على مدار اليوم تم تنظيف المبنى كامل</div>`;
       html += `<div>* تواجد عدد (    ) عامل من شركة القناص</div>`;
-      html += `  </div>
-</body></html>`;
+      html += `</body></html>`;
 
       const reportWindow = window.open("", "_blank");
       reportWindow.document.write(html);
@@ -1057,9 +977,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <button onclick="setTaskStatus(${index}, 'pending')">تحت المعالجة <span class="dot pending"></span></button>
           <button onclick="setTaskStatus(${index}, 'done')">تمت المعالجة <span class="dot done"></span></button>
         </div>
-        <div class="task-delete">
-          <button class="delete-btn" onclick="deleteTask(${index})">حذف</button>
-        </div>
       `;
       container.appendChild(card);
       updateTaskStatusDisplay(card, task.status);
@@ -1085,24 +1002,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    
-    // حذف مهمة
-    
-    // إعادة رسم جميع المهام
-    function renderAllTasks() {
-      const container = document.getElementById('tasks-container');
-      container.innerHTML = '';
-      tasks.forEach((t, idx) => renderTask(t, idx));
-    }
-
-    function deleteTask(index) {
-      tasks.splice(index, 1);
-      saveTasks();
-      renderAllTasks();
-    }
-    
-    
+    window.onload = function() {
+      loadMain();
+    };
   </script>
-  </div>
 </body>
 </html>
