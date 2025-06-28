@@ -415,20 +415,18 @@
   
 <script>
 // Authentication
-const ADMIN_USER = 'a';
-const ADMIN_PASS = 'a';
+const ADMIN_USER = '1';
+const ADMIN_PASS = '1';
 
-document.addEventListener('DOMContentLoaded', async () => {
-  document.getElementById('login-button').addEventListener('click', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('login-button').addEventListener('click', () => {
     const user = document.getElementById('login-username').value;
     const pass = document.getElementById('login-password').value;
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
       sessionStorage.setItem('loggedIn','true');
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
-      await loadData();
-          await loadData();
-    loadMain();
+      loadMain();
     } else {
       alert('اسم المستخدم أو كلمة المرور غير صحيحة');
     }
@@ -436,8 +434,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (sessionStorage.getItem('loggedIn') === 'true') {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
-    await loadData();
-          await loadData();
     loadMain();
   }
 });
