@@ -418,32 +418,12 @@
 const ADMIN_USER = 'abdulkhaleq';
 const ADMIN_PASS = 'Abdu1kha1eq#404seS1';
 
-
-    let data = {};
-    let tasks = [];
-
-    async function loadData() {
-      const guests = await fetch(`${API_URL}?sheet=guests`).then(r=>r.json());
-      data = {};
-      guests.forEach(g => {
-        const key = 'room-' + g.room;
-        if (!data[key]) data[key] = [];
-        data[key].push({ name: g.name, phone: g.phone, rank: g.info, plate: '', grade: '' });
-      });
-      Object.keys(data).forEach(k => {
-        while (data[k].length < 3) data[k].push({ name: '', phone: '', rank: '', plate: '', grade: '' });
-      });
-      tasks = await fetch(`${API_URL}?sheet=tasks`).then(r=>r.json());
-    }
-
 document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('login-button').addEventListener('click', async () => {
     const user = document.getElementById('login-username').value;
     const pass = document.getElementById('login-password').value;
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
       sessionStorage.setItem('loggedIn','true');
-      // Load data after login
-      await loadData();
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       await loadData();
@@ -454,7 +434,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
   if (sessionStorage.getItem('loggedIn') === 'true') {
-    await loadData();
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     await loadData();
@@ -465,6 +444,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 </script>
 
 <script>
+    // بيانات وهمية مبدئية
+    let data = JSON.parse(localStorage.getItem('housingData') || `{
+      "room-101": [
+        {"name":"سعود محمد التميمي","phone":"0539332262","rank":"رائد","plate":"د د ا - 4699","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ],
+      "room-102": [
+        {"name":"عامر صقر الشمري","phone":"055146446","rank":"ملازم أول","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ],
+      "room-103": [
+        {"name":"عبدالرحمن حمد الدوسري","phone":"0564082502","rank":"مقدم","plate":"ح ن ن 8469","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ],
+      "room-104": [
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""},
+        {"name":"","phone":"","rank":"","plate":"","grade":""}
+      ]
+      /* أكمل بقية الغرف حسب الحاجة */
+    }`);
+
+    function saveToStorage() {
+      localStorage.setItem('housingData', JSON.stringify(data));
+    }
+
     function loadMain() {
       document.getElementById('search').style.display = 'none';
       document.getElementById('export-btn').style.display = 'none';
@@ -599,6 +607,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function updateField(room, index, field, value) {
       data[room][index][field] = value;
+      saveToStorage();
       document.querySelectorAll('.room-card').forEach(card => {
         const rNum = card.querySelector('.room-title').textContent.split('|')[1].trim();
         const key = 'room-' + rNum;
