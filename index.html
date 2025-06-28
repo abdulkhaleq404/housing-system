@@ -415,18 +415,20 @@
   
 <script>
 // Authentication
-const ADMIN_USER = '1';
-const ADMIN_PASS = '1';
+const ADMIN_USER = '2';
+const ADMIN_PASS = '2';
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('login-button').addEventListener('click', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('login-button').addEventListener('click', async () => {
     const user = document.getElementById('login-username').value;
     const pass = document.getElementById('login-password').value;
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
       sessionStorage.setItem('loggedIn','true');
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
-      loadMain();
+      await loadData();
+          await loadData();
+    loadMain();
     } else {
       alert('اسم المستخدم أو كلمة المرور غير صحيحة');
     }
@@ -434,36 +436,41 @@ document.addEventListener('DOMContentLoaded', () => {
   if (sessionStorage.getItem('loggedIn') === 'true') {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+    await loadData();
+          await loadData();
     loadMain();
   }
 });
 </script>
 
 <script>
-    // بيانات وهمية مبدئية
-    let data = JSON.parse(localStorage.getItem('housingData') || `{
-      "room-101": [
-        {"name":"سعود محمد التميمي","phone":"0539332262","rank":"رائد","plate":"د د ا - 4699","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ],
-      "room-102": [
-        {"name":"عامر صقر الشمري","phone":"055146446","rank":"ملازم أول","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ],
-      "room-103": [
-        {"name":"عبدالرحمن حمد الدوسري","phone":"0564082502","rank":"مقدم","plate":"ح ن ن 8469","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ],
-      "room-104": [
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ]
-      /* أكمل بقية الغرف حسب الحاجة */
-    }`);
+    
+    // تحميل بيانات الغرف من localStorage أو تعبئة default
+    let stored = localStorage.getItem('housingData');
+    let data = stored
+      ? JSON.parse(stored)
+      : {
+          "room-101": [
+            {"name":"سعود محمد التميمي","phone":"0539332262","rank":"رائد","plate":"د د ا - 4699","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""}
+          ],
+          "room-102": [
+            {"name":"عامر صقر الشمري","phone":"055146446","rank":"ملازم أول","plate":"","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""}
+          ],
+          "room-103": [
+            {"name":"عبدالرحمن حمد الدوسري","phone":"0564082502","rank":"مقدم","plate":"ح ن ن 8469","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""}
+          ],
+          "room-104": [
+            {"name":"","phone":"","rank":"","plate":"","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""},
+            {"name":"","phone":"","rank":"","plate":"","grade":""}
+          ]
+        };
 
     function saveToStorage() {
       localStorage.setItem('housingData', JSON.stringify(data));
