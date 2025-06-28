@@ -292,7 +292,7 @@ grid-template-columns: repeat(1, 1fr);
 </head>
 <body>
 <div style="position: fixed; top: 10px; left: 10px; z-index: 999;">
-  <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng3.png" alt="شعار" style="max-width: 160px; height: auto; margin: 0;">
+  <img src="https://raw.githubusercontent.com/abdulkhaleq404/housing-system/refs/heads/main/logopng2.png" alt="شعار" style="max-width: 250px; height: auto; margin: 0;">
 </div>
 
 <h2>مـبـنى رابـطـة الـعـالـم الإسـلامـي</h2>
@@ -317,13 +317,8 @@ grid-template-columns: repeat(1, 1fr);
 <script>
 let currentFloor = 1;
 const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
-const occupantsPerRoom = { 1: 3, 2: 3, 3: 8, 4: 8 };
-const ranks = {
-1: ['ملازم', 'ملازم أول', 'نقيب', 'رائد', 'مقدم', 'عقيد', 'عميد', 'لواء'],
-2: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب', 'رقيب أول', 'رئيس رقباء'],
-3: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب'],
-4: ['جندي', 'جندي أول', 'عريف', 'وكيل رقيب', 'رقيب']
-};
+const occupantsPerRoom = { 1: 3, 2: 3, 3: 16, 4: 16 };
+const ranks = {1: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'], 2: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'], 3: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'], 4: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء']};
 let data = JSON.parse(localStorage.getItem('housingData') || '{}');
 
 function saveToStorage() {
@@ -333,9 +328,9 @@ localStorage.setItem('housingData', JSON.stringify(data));
 function loadMain() {
 document.getElementById('cards').innerHTML = `
 <div class="stats-container">
-<div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">408</div></div>
-<div class="stat-box"><div>الغرف الشاغرة</div><div class="stat-number">${408 - countGuests()}</div></div>
-<div class="stat-box"><div>الغرف المشغولة</div><div class="stat-number">${countGuests()}</div></div>
+<div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">600</div></div>
+<div class="stat-box"><div>الطاقة المتاحة للتسكين</div><div class="stat-number">${600 - countGuests()}</div></div>
+<div class="stat-box"><div>عدد الضيوف الحاليين</div><div class="stat-number">${countGuests()}</div></div>
 <div class="stat-box"><div>الضباط</div><div class="stat-number">${countRanks('ضباط')}</div></div>
 <div class="stat-box"><div>الأفراد</div><div class="stat-number">${countRanks('أفراد')}</div></div>
 <div class="stat-box"><div>السيارات</div><div class="stat-number">${countCars()}</div></div>
@@ -376,7 +371,7 @@ for (let i = 1; i <= roomCounts[f]; i++) {
 const roomNumber = `${f}${i.toString().padStart(2, '0')}`;
 const roomKey = `room-${roomNumber}`;
 if (!data[roomKey]) {
-data[roomKey] = Array.from({ length: occupantsPerRoom[f] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
+data[roomKey] = Array.from({ length: occupantsPerRoom[f] }, () => ({ name: '', phone: '', rank: '', grade: '', plate: '' }));
 }
 const card = createRoomCard(roomKey, roomNumber, f);
 container.appendChild(card);
@@ -389,7 +384,7 @@ for (let i = 1; i <= roomCounts[floor]; i++) {
 const roomNumber = `${floor}${i.toString().padStart(2, '0')}`;
 const roomKey = `room-${roomNumber}`;
 if (!data[roomKey]) {
-data[roomKey] = Array.from({ length: occupantsPerRoom[floor] }, () => ({ name: '', phone: '', rank: '', plate: '' }));
+data[roomKey] = Array.from({ length: occupantsPerRoom[floor] }, () => ({ name: '', phone: '', rank: '', grade: '', plate: '' }));
 }
 const card = createRoomCard(roomKey, roomNumber, floor);
 container.appendChild(card);
@@ -463,7 +458,7 @@ const cards = document.querySelectorAll('.room-card');
 cards.forEach(card => {
 const roomData = data[card.id];
 const match = roomData.some(occ =>
-occ.name.includes(val) || occ.phone.includes(val) || occ.rank.includes(val) || occ.plate.includes(val)
+occ.name.includes(val) || occ.phone.includes(val) || occ.rank.includes(val) || occ.grade && occ.grade.toString() === val || occ.plate.includes(val)
 );
 card.style.display = match ? 'block' : 'none';
 if (match) card.classList.remove('open');
@@ -496,7 +491,7 @@ function exportData() {
       output += `• غرفة | ${room.replace('room-', '')}\n`;
       data[room].forEach(occ => {
         if (occ.name) {
-          output += `الاسم: ${occ.name}\nالرقم: ${occ.phone}\nالرتبة: ${occ.rank}\nاللوحة: ${occ.plate}\n\n`;
+          output += `الاسم: ${occ.name}\nالرقم: ${occ.phone}\nالرتبة: ${occ.rank}\nالمرتبة: ${occ.grade}\nاللوحة: ${occ.plate}\n\n`;
         }
       });
     }
