@@ -415,8 +415,8 @@
   
 <script>
 // Authentication
-const ADMIN_USER = '3';
-const ADMIN_PASS = '3';
+const ADMIN_USER = '1';
+const ADMIN_PASS = '1';
 
 document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('login-button').addEventListener('click', async () => {
@@ -444,29 +444,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 </script>
 
 <script>
-    // بيانات وهمية مبدئية
-    let data = JSON.parse(localStorage.getItem('housingData') || `{
-      "room-101": [
-        {"name":"سعود محمد التميمي","phone":"0539332262","rank":"رائد","plate":"د د ا - 4699","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ],
-      "room-102": [
-        {"name":"عامر صقر الشمري","phone":"055146446","rank":"ملازم أول","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ],
-      "room-103": [
-        {"name":"عبدالرحمن حمد الدوسري","phone":"0564082502","rank":"مقدم","plate":"ح ن ن 8469","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ],
-      "room-104": [
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""},
-        {"name":"","phone":"","rank":"","plate":"","grade":""}
-      ]
-      /* أكمل بقية الغرف حسب الحاجة */
     }`);
 
     function saveToStorage() {
