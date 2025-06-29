@@ -452,6 +452,18 @@ data[room][index][field] = value;
 saveToStorage();
 const dotsContainer = document.querySelector(`#${room} .status-dots`);
 dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
+  // مزامنة التغيير مع Google Sheets
+  const rm = room.replace('room-','');
+  const fl = parseInt(rm.charAt(0));
+  sendToGoogleSheet({
+    sheet: 'Guests',
+    action: 'update',
+    floor: fl,
+    room: rm,
+    index: index,
+    field: field,
+    value: value
+  });
 }
 
 function searchRooms() {
