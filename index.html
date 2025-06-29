@@ -296,6 +296,7 @@ grid-template-columns: repeat(1, 1fr);
 
 <div class="floor-selection">
 <button id="main-btn" class="floor-btn" onclick="loadMain()">الـصـفـحـة الـرئـيـسـية</button>
+<button id="save-btn" style="margin-left:8px;padding:6px 10px;font-size:14px;" onclick="saveAll()">حفظ</button>
 </div>
 
 <div class="floor-selection">
@@ -452,18 +453,6 @@ data[room][index][field] = value;
 saveToStorage();
 const dotsContainer = document.querySelector(`#${room} .status-dots`);
 dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
-  // مزامنة التغيير مع Google Sheets
-  const rm = room.replace('room-','');
-  const fl = parseInt(rm.charAt(0));
-  sendToGoogleSheet({
-    sheet: 'Guests',
-    action: 'update',
-    floor: fl,
-    room: rm,
-    index: index,
-    field: field,
-    value: value
-  });
 }
 
 function searchRooms() {
@@ -515,6 +504,28 @@ function exportData() {
   newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold; white-space: pre-wrap;">${output}</pre>`);
 }
 loadMain();
+  // دالة لحفظ جميع البيانات الجديدة في Google Sheets
+  function saveAll() {
+    Object.keys(data).forEach(key => {
+      const records = data[key];
+      const startIndex = initialCounts[key] || 0;
+      const f = parseInt(key.split('-')[1].charAt(0));
+      const room = key.split('-')[1];
+      for (let i = startIndex; i < records.length; i++) {
+        const rec = records[i];
+        if (rec.name || rec.phone) {
+          sendToGoogleSheet({
+            sheet: 'Guests', action: 'add',
+            floor: f, room: room,
+            name: rec.name, info: rec.info || '', phone: rec.phone,
+            checkin_date: rec.checkin_date || new Date().toISOString().split('T')[0],
+            checkout_date: rec.checkout_date || '', status: rec.status || 'checked-in'
+          });
+        }
+      }
+    });
+    alert("تم حفظ البيانات في Google Sheets");
+  }
 </script>
 
 </body>
