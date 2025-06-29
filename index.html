@@ -312,13 +312,15 @@ grid-template-columns: repeat(1, 1fr);
 <div id="cards" class="cards-container"></div>
 
 <script>
+
+// ——— Google Sheets integration ———
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwhXcN72pLqG-CdOXMKk3Z--_feGrJYoRX67m8qzzpDy5FBQAj0YnoPn_lT_lsZLwkp/exec';
 
 async function sendToGoogleSheet(payload) {
   try {
     const res = await fetch(SHEET_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     return await res.json();
@@ -353,130 +355,200 @@ async function fetchGuests() {
     console.error('Error fetching Guests:', err);
   }
 }
-
 window.addEventListener('load', fetchGuests);
-
-// بيانات التطبيق
+// ——————————————————————————————
 let currentFloor = 1;
-const roomCounts = {1:36,2:36,3:12,4:12};
-const occupantsPerRoom = {1:3,2:3,3:16,4:16};
-const ranks = {
-  1: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'],
-  2: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'],
-  3: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'],
-  4: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء']
-};
-let data = JSON.parse(localStorage.getItem('housingData')||'{}');
+const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
+const occupantsPerRoom = { 1: 3, 2: 3, 3: 16, 4: 16 };
+const ranks = {1: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'], 2: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'], 3: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء'], 4: ['جندي','جندي أول','عريف','وكيل رقيب','رقيب','رقيب أول','رئيس رقباء','ملازم','ملازم أول','نقيب','رائد','مقدم','عقيد','عميد','لواء']};
+let data = JSON.parse(localStorage.getItem('housingData') || '{}');
 
 function saveToStorage() {
-  localStorage.setItem('housingData', JSON.stringify(data));
+localStorage.setItem('housingData', JSON.stringify(data));
 }
 
 function loadMain() {
-  const cards = document.getElementById('cards');
-  cards.innerHTML = `
-    <div class="stats-container">
-      <div class="stat-box"><div>الطاقة الإجمالية</div><div class="stat-number">600</div></div>
-      <div class="stat-box"><div>المتاحة</div><div class="stat-number">${600 - countGuests()}</div></div>
-      <div class="stat-box"><div>الضيوف</div><div class="stat-number">${countGuests()}</div></div>
-      <div class="stat-box"><div>ضباط</div><div class="stat-number">${countRanks('ضباط')}</div></div>
-      <div class="stat-box"><div>أفراد</div><div class="stat-number">${countRanks('أفراد')}</div></div>
-      <div class="stat-box"><div>السيارات</div><div class="stat-number">${countCars()}</div></div>
-    </div>`;
-  document.getElementById('search').style.display='none';
-  document.getElementById('export-btn').style.display='none';
+document.getElementById('cards').innerHTML = `
+<div class="stats-container">
+<div class="stat-box"><div>الطاقة الإستيعابية</div><div class="stat-number">600</div></div>
+<div class="stat-box"><div>الطاقة المتاحة للتسكين</div><div class="stat-number">${600 - countGuests()}</div></div>
+<div class="stat-box"><div>عدد الضيوف الحاليين</div><div class="stat-number">${countGuests()}</div></div>
+<div class="stat-box"><div>الضباط</div><div class="stat-number">${countRanks('ضباط')}</div></div>
+<div class="stat-box"><div>الأفراد</div><div class="stat-number">${countRanks('أفراد')}</div></div>
+<div class="stat-box"><div>السيارات</div><div class="stat-number">${countCars()}</div></div>
+</div>
+`;
+document.getElementById('search').style.display = 'none';
+document.getElementById('export-btn').style.display = 'none';
 }
 
 function countGuests() {
-  return Object.values(data).flat().filter(o=>o.name).length;
+return Object.values(data).flat().filter(x => x.name).length;
 }
 
 function countRanks(type) {
-  const officers = ranks[1];
-  return Object.values(data).flat().filter(o=>o.rank).filter(o=> type==='ضباط'? officers.includes(o.rank): !officers.includes(o.rank)).length;
+const officerRanks = ranks[1];
+return Object.values(data).flat().filter(x => {
+if (!x.rank) return false;
+if (type === 'ضباط') return officerRanks.includes(x.rank);
+else return !officerRanks.includes(x.rank);
+}).length;
 }
 
 function countCars() {
-  return Object.values(data).flat().filter(o=>o.plate).length;
+return Object.values(data).flat().filter(x => x.plate && x.plate.trim() !== '').length;
 }
 
 function loadFloor(floor) {
-  currentFloor = floor;
-  document.getElementById('search').value='';
-  const cards = document.getElementById('cards');
-  cards.innerHTML='';
-  const floors = floor===0? [1,2,3,4]: [floor];
-  floors.forEach(f=>{
-    for(let i=1;i<=roomCounts[f];i++){
-      const num = `${f}${String(i).padStart(2,'0')}`;
-      const key = `room-${num}`;
-      if(!data[key]) data[key] = Array.from({length:occupantsPerRoom[f]}, ()=>({name:'',phone:'',rank:'',grade:'',plate:''}));
-      cards.appendChild(createRoomCard(key,num,f));
-    }
-  });
-  document.getElementById('search').style.display = floor===0?'block':'none';
-  document.getElementById('export-btn').style.display = floor===0?'block':'none';
-  saveToStorage();
+currentFloor = floor;
+document.getElementById('search').value = '';
+const container = document.getElementById('cards');
+container.innerHTML = '';
+
+if (floor === 0) {
+document.getElementById('search').style.display = 'block';
+document.getElementById('export-btn').style.display = 'block';
+for (let f = 1; f <= 4; f++) {
+for (let i = 1; i <= roomCounts[f]; i++) {
+const roomNumber = `${f}${i.toString().padStart(2, '0')}`;
+const roomKey = `room-${roomNumber}`;
+if (!data[roomKey]) {
+data[roomKey] = Array.from({ length: occupantsPerRoom[f] }, () => ({ name: '', phone: '', rank: '', grade: '', plate: '' }));
+}
+const card = createRoomCard(roomKey, roomNumber, f);
+container.appendChild(card);
+}
+}
+} else {
+document.getElementById('search').style.display = 'none';
+document.getElementById('export-btn').style.display = 'none';
+for (let i = 1; i <= roomCounts[floor]; i++) {
+const roomNumber = `${floor}${i.toString().padStart(2, '0')}`;
+const roomKey = `room-${roomNumber}`;
+if (!data[roomKey]) {
+data[roomKey] = Array.from({ length: occupantsPerRoom[floor] }, () => ({ name: '', phone: '', rank: '', grade: '', plate: '' }));
+}
+const card = createRoomCard(roomKey, roomNumber, floor);
+container.appendChild(card);
+}
+}
+saveToStorage();
 }
 
-function createRoomCard(key,num,floor){
-  const card=document.createElement('div'); card.className='room-card'; card.id=key;
-  const title=document.createElement('div'); title.className='room-title'; title.textContent=`غرفة ${num}`;
-  const btn=document.createElement('button'); btn.className='toggle-btn'; btn.textContent='+';
-  btn.onclick=()=>{card.classList.toggle('open'); btn.textContent = card.classList.contains('open')? '-': '+';};
-  const dots=document.createElement('div'); dots.className='status-dots';
-  data[key].forEach(o=>{ const d=document.createElement('div'); d.className='dot'+(o.name?' filled':''); dots.appendChild(d); });
-  const occ=document.createElement('div'); occ.className='occupants';
-  data[key].forEach((o,i)=>{
-    const div=document.createElement('div'); div.className='occupant';
-    div.innerHTML=`
-      <input type="text" placeholder="الإسم" value="${o.name}" oninput="updateField('${key}',${i},'name',this.value)">
-      <input type="tel" placeholder="رقم الجوال" maxlength="10" value="${o.phone}" oninput="updateField('${key}',${i},'phone',this.value)">
-      <select onchange="updateField('${key}',${i},'rank',this.value)">
+function createRoomCard(roomKey, roomNumber, floor) {
+const card = document.createElement('div');
+card.className = 'room-card';
+card.id = roomKey;
+
+const title = document.createElement('div');
+title.className = 'room-title';
+title.textContent = `غـرفـة | ${roomNumber}`;
+
+const toggle = document.createElement('button');
+toggle.className = 'toggle-btn';
+toggle.innerHTML = '+';
+toggle.style.textAlign = 'left';  // هذه السطر لضبط المحاذاة على اليسار
+toggle.onclick = () => {
+  card.classList.toggle('open');
+  toggle.innerHTML = card.classList.contains('open') ? '-' : '+';
+};
+
+const dots = document.createElement('div');
+dots.className = 'status-dots';
+data[roomKey].forEach(occ => {
+const dot = document.createElement('div');
+dot.className = 'dot' + (occ.name ? ' filled' : '');
+dots.appendChild(dot);
+});
+
+const occContainer = document.createElement('div');
+occContainer.className = 'occupants';
+
+data[roomKey].forEach((occ, idx) => {
+const occDiv = document.createElement('div');
+occDiv.className = 'occupant';
+occDiv.innerHTML = `
+      <input type="text" placeholder="الإسم" value="${occ.name}" oninput="updateField('${roomKey}', ${idx}, 'name', this.value)">
+      <input type="tel" placeholder="رقم الجوال" maxlength="10" value="${occ.phone}" oninput="updateField('${roomKey}', ${idx}, 'phone', this.value)">
+      <select onchange="updateField('${roomKey}', ${idx}, 'rank', this.value)">
         <option value="">الرتبة</option>
-        ${ranks[floor].map(r=>`<option value="${r}"${o.rank===r?' selected':''}>${r}</option>`).join('')}
+        ${ranks[floor].map(rank => `<option value="${rank}" ${occ.rank === rank ? 'selected' : ''}>${rank}</option>`).join('')}
       </select>
-      <select onchange="updateField('${key}',${i},'grade',this.value)">
+      <select onchange="updateField('${roomKey}', ${idx}, 'grade', this.value)">
         <option value="">المرتبة</option>
-        ${Array.from({length:14},(_,j)=>`<option value="${j+1}"${o.grade===(j+1).toString()?' selected':''}>${j+1}</option>`).join('')}
+        ${Array.from({length:14}, (_,i) => `<option value="${i+1}" ${occ.grade === String(i+1) ? 'selected' : ''}>${i+1}</option>`).join('')}
       </select>
-      <input type="text" placeholder="رقم اللوحة" value="${o.plate}" oninput="updateField('${key}',${i},'plate',this.value)">
+      <input type="text" placeholder="رقم اللوحة" value="${occ.plate}" oninput="updateField('${roomKey}', ${idx}, 'plate', this.value)">
     `;
-    occ.appendChild(div);
-  });
-  card.append(title,btn,dots,occ);
-  return card;
+
+occContainer.appendChild(occDiv);
+});
+
+card.appendChild(title);
+card.appendChild(toggle);
+card.appendChild(dots);
+card.appendChild(occContainer);
+
+return card;
 }
 
-function updateField(key,index,field,value){
-  data[key][index][field]=value; saveToStorage();
-  document.querySelector(`#${key} .status-dots`).children[index].className = data[key][index].name? 'dot filled':'dot';
-  const rm=key.replace('room-',''), fl=parseInt(rm.charAt(0));
-  sendToGoogleSheet({sheet:'Guests',action:'update',floor:fl,room:rm,index,index,field, value});
+function updateField(room, index, field, value) {
+data[room][index][field] = value;
+saveToStorage();
+const dotsContainer = document.querySelector(`#${room} .status-dots`);
+dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
 }
 
-function searchRooms(){
-  const v=document.getElementById('search').value.trim();
-  document.querySelectorAll('.room-card').forEach(card=>{
-    const ok = data[card.id].some(o=>o.name.includes(v)||o.phone.includes(v)||o.rank.includes(v)||o.grade.toString()===v||o.plate.includes(v));
-    card.style.display = ok? 'block':'none'; if(ok) card.classList.remove('open');
-  });
+function searchRooms() {
+const val = document.getElementById('search').value.trim();
+const cards = document.querySelectorAll('.room-card');
+cards.forEach(card => {
+const roomData = data[card.id];
+const match = roomData.some(occ =>
+occ.name.includes(val) || occ.phone.includes(val) || occ.rank.includes(val) || occ.grade && occ.grade.toString() === val || occ.plate.includes(val)
+);
+card.style.display = match ? 'block' : 'none';
+if (match) card.classList.remove('open');
+});
 }
 
-function exportData(){
-  const now=new Date(),date=now.toISOString().split('T')[0],w=window.open('','', 'width=800,height=600');
-  let out=`تقرير | ${date}\n\n`;
-  Object.keys(data).forEach(r=>{ if(data[r].some(o=>o.name)){
-      out+=`غرفة ${r.replace('room-','')}\n`;
-      data[r].forEach(o=>{ if(o.name) out+=`- ${o.name}, ${o.phone}, ${o.rank}, ${o.grade}, ${o.plate}\n`; });
-      out+='\n';
+function exportData() {
+  const now = new Date();
+
+  // التاريخ الميلادي بصيغة: 2025/04/23
+  const gregorianDate = now.toLocaleDateString('en-GB').split('/').reverse().join('/');
+
+  // اليوم باللغة العربية
+  const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
+
+  // الوقت بصيغة: الساعة | 4:23 AM
+  const hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const formattedHour = hours % 12 || 12;
+  const formattedTime = `الساعة | ${formattedHour}:${minutes} ${period}`;
+
+  let output = `تقرير مبنى رابطة العالم الإسلامي\n`;
+  output += `التاريخ | ${gregorianDate}\n`;
+  output += `اليوم | ${dayName}\n`;
+  output += `${formattedTime}\n\n`;
+
+  Object.keys(data).forEach(room => {
+    if (data[room].some(occ => occ.name)) {
+      output += `• غرفة | ${room.replace('room-', '')}\n`;
+      data[room].forEach(occ => {
+        if (occ.name) {
+          output += `الاسم: ${occ.name}\nالرقم: ${occ.phone}\nالرتبة: ${occ.rank}\nالمرتبة: ${occ.grade}\nاللوحة: ${occ.plate}\n\n`;
+        }
+      });
     }
   });
-  w.document.write(`<pre style="direction:rtl;font-family:Arial;font-weight:bold;white-space:pre-wrap;">${out}</pre>`);
+
+  const newWindow = window.open('', '', 'width=800,height=600');
+  newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold; white-space: pre-wrap;">${output}</pre>`);
 }
-
+loadMain();
 </script>
-
 
 </body>
 </html>
