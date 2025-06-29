@@ -332,6 +332,35 @@ async function sendToGoogleSheet(payload) {
   }
 }
 
+// Fetch all guests on page load
+async function fetchGuests() {
+  try {
+    const res = await fetch(`${SHEET_URL}?action=getAll&sheet=Guests`);
+    const guests = await res.json();
+    guests.forEach(item => {
+      const key = `room-${item.floor}${item.room}`;
+      data[key] = data[key] || [];
+      data[key].push({
+        name: item.name,
+        phone: item.phone,
+        rank: item.rank || '',
+        grade: item.grade || '',
+        plate: item.plate || '',
+        checkin_date: item.checkin_date,
+        checkout_date: item.checkout_date,
+        status: item.status
+      });
+    });
+    saveToStorage();
+    // Refresh view to show all floors
+    loadFloor(0);
+  } catch (err) {
+    console.error('Error fetching Guests:', err);
+  }
+}
+window.addEventListener('load', fetchGuests);
+
+
 // Override updateField to sync with Google Sheets
 
 let currentFloor = 1;
@@ -464,62 +493,33 @@ card.appendChild(occContainer);
 return card;
 }
 
+
 function updateField(room, index, field, value) {
-data[room][index][field] = value;
-saveToStorage();
-const dotsContainer = document.querySelector(`#${room} .status-dots`);
-dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
+  data[room][index][field] = value;
+  saveToStorage();
+  const dotsContainer = document.querySelector(`#${room} .status-dots`);
+  dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
+  // Sync update to Google Sheets
+  const roomNumber = room.replace('room-', '');
+  const floor = parseInt(roomNumber.charAt(0));
+  const roomId = roomNumber;
+  sendToGoogleSheet({
+    sheet: 'Guests',
+    action: 'update',
+    floor,
+    room: roomId,
+    index,
+    field,
+    value
+  });
 }
-
-function searchRooms() {
-const val = document.getElementById('search').value.trim();
-const cards = document.querySelectorAll('.room-card');
-cards.forEach(card => {
-const roomData = data[card.id];
-const match = roomData.some(occ =>
-occ.name.includes(val) || occ.phone.includes(val) || occ.rank.includes(val) || occ.grade && occ.grade.toString() === val || occ.plate.includes(val)
 );
-card.style.display = match ? 'block' : 'none';
-if (match) card.classList.remove('open');
-});
-}
-
-function exportData() {
-  const now = new Date();
-
-  // التاريخ الميلادي بصيغة: 2025/04/23
-  const gregorianDate = now.toLocaleDateString('en-GB').split('/').reverse().join('/');
-
-  // اليوم باللغة العربية
-  const dayName = now.toLocaleDateString('ar-SA', { weekday: 'long' });
-
-  // الوقت بصيغة: الساعة | 4:23 AM
-  const hours = now.getHours();
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const period = hours >= 12 ? 'PM' : 'AM';
-  const formattedHour = hours % 12 || 12;
-  const formattedTime = `الساعة | ${formattedHour}:${minutes} ${period}`;
-
-  let output = `تقرير مبنى رابطة العالم الإسلامي\n`;
-  output += `التاريخ | ${gregorianDate}\n`;
-  output += `اليوم | ${dayName}\n`;
-  output += `${formattedTime}\n\n`;
-
-  Object.keys(data).forEach(room => {
-    if (data[room].some(occ => occ.name)) {
-      output += `• غرفة | ${room.replace('room-', '')}\n`;
-      data[room].forEach(occ => {
-        if (occ.name) {
-          output += `الاسم: ${occ.name}\nالرقم: ${occ.phone}\nالرتبة: ${occ.rank}\nالمرتبة: ${occ.grade}\nاللوحة: ${occ.plate}\n\n`;
-        }
-      });
     }
   });
 
   const newWindow = window.open('', '', 'width=800,height=600');
   newWindow.document.write(`<pre style="direction: rtl; font-family: Arial; font-weight: bold; white-space: pre-wrap;">${output}</pre>`);
 }
-loadMain();
 </script>
 
 </body>
