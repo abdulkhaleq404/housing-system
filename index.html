@@ -5,6 +5,10 @@
 <meta charset="UTF-8">
 <title>مـبـنى رابـطـة الـعـالـم الإسـلامـي</title>
 <style>
+    /* تعطيل زر الزائد وإظهار نماذج الإدخال دائماً */
+    .toggle-btn { display: none !important; }
+    .occupants { display: block !important; }
+
 
 body {
   font-family: 'Arial', sans-serif;
@@ -288,6 +292,8 @@ grid-template-columns: repeat(1, 1fr);
     overflow: hidden;
   }
 
+    /* إظهار خانة الاشغال عند الضغط */
+    .room-card.open .occupants { display: block; }
 </style>
 </head>
 <body>
@@ -296,7 +302,6 @@ grid-template-columns: repeat(1, 1fr);
 
 <div class="floor-selection">
 <button id="main-btn" class="floor-btn" onclick="loadMain()">الـصـفـحـة الـرئـيـسـية</button>
-            <button id=\"save-btn\" style=\"margin-left:8px;padding:6px 10px;font-size:14px;\" onclick=\"saveAll()\">حفظ</button>
 </div>
 
 <div class="floor-selection">
@@ -453,12 +458,6 @@ data[room][index][field] = value;
 saveToStorage();
 const dotsContainer = document.querySelector(`#${room} .status-dots`);
 dotsContainer.children[index].className = data[room][index].name ? 'dot filled' : 'dot';
-
-  // مزامنة التغيير مع Google Sheets
-  const parts = room.split('-')[1];
-  const fl = parseInt(parts.charAt(0));
-  sendToGoogleSheet({ sheet: 'Guests', action: 'update', floor: fl, room: parts, index: index, field: field, value: value });
-
 }
 
 function searchRooms() {
@@ -511,32 +510,31 @@ function exportData() {
 }
 loadMain();
 
-  // إضافة دالة حفظ جميع البيانات الجديدة
-  function saveAll() {
-    Object.keys(data).forEach(key => {
-      const parts = key.split('-')[1];
-      const fl = parseInt(parts.charAt(0));
-      const records = data[key];
-      records.forEach((rec, idx) => {
-        if (rec.name || rec.phone) {
-          sendToGoogleSheet({
-            sheet: 'Guests',
-            action: 'add',
-            floor: fl,
-            room: parts,
-            name: rec.name,
-            info: rec.info || '',
-            phone: rec.phone,
-            checkin_date: rec.checkin_date || new Date().toISOString().split('T')[0],
-            checkout_date: rec.checkout_date || '',
-            status: rec.status || ''
-          });
+    function saveAll() {
+      // حفظ السجلات الجديدة دفعة واحدة
+      Object.keys(data).forEach(key => {
+        const parts = key.split('-')[1];
+        const floor = parseInt(parts.charAt(0));
+        const recs = data[key];
+        for (let i = initialCounts[key] || 0; i < recs.length; i++) {
+          const r = recs[i];
+          if (r.name || r.phone) {
+            sendToGoogleSheet({
+              sheet: 'Guests', action: 'add',
+              floor: floor, room: parts,
+              name: r.name, info: '', phone: r.phone,
+              checkin_date: r.checkin_date || new Date().toISOString().split('T')[0],
+              checkout_date: r.checkout_date || '',
+              status: r.status || ''
+            }).then(res => {
+              if (res.success) initialCounts[key]++;
+            });
+          }
         }
       });
-    });
-    alert("تم حفظ البيانات الجديدة في Google Sheets");
-  }
-
+      alert('تم حفظ البيانات الجديدة في Google Sheets');
+    }
+    
 </script>
 
 </body>
