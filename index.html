@@ -312,51 +312,6 @@ grid-template-columns: repeat(1, 1fr);
 <div id="cards" class="cards-container"></div>
 
 <script>
-
-// ——— Google Sheets integration ———
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwhXcN72pLqG-CdOXMKk3Z--_feGrJYoRX67m8qzzpDy5FBQAj0YnoPn_lT_lsZLwkp/exec';
-
-async function sendToGoogleSheet(payload) {
-  try {
-    const res = await fetch(SHEET_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    return await res.json();
-  } catch (err) {
-    console.error('Error sending to Google Sheets:', err);
-  }
-}
-
-async function fetchGuests() {
-  try {
-    const res = await fetch(`${SHEET_URL}?action=getAll&sheet=Guests`);
-    const guests = await res.json();
-    data = {};
-    guests.forEach(item => {
-      const key = `room-${item.floor}${item.room}`;
-      data[key] = data[key] || [];
-      data[key].push({
-        name: item.name,
-        phone: item.phone,
-        rank: item.rank || '',
-        grade: item.grade || '',
-        plate: item.plate || '',
-        checkin_date: item.checkin_date,
-        checkout_date: item.checkout_date,
-        status: item.status
-      });
-    });
-    saveToStorage();
-    loadMain();
-    loadFloor(currentFloor);
-  } catch (err) {
-    console.error('Error fetching Guests:', err);
-  }
-}
-window.addEventListener('load', fetchGuests);
-// ——————————————————————————————
 let currentFloor = 1;
 const roomCounts = { 1: 36, 2: 36, 3: 12, 4: 12 };
 const occupantsPerRoom = { 1: 3, 2: 3, 3: 16, 4: 16 };
